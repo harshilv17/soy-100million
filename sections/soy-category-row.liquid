@@ -1,0 +1,68 @@
+{{ 'soy-category.css' | asset_url | stylesheet_tag }}
+
+<section class="soy soy-catrow soy-section" style="background: {{ section.settings.bg }};">
+  <div class="soy-container">
+    <div class="soy-section-head">
+      <hr class="soy-rule">
+      <h2 class="soy-title">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="soy-catrow__grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link }}" class="soy-cat" {{ block.shopify_attributes }}>
+          <span class="soy-cat__circle">{% render 'soy-icon', name: block.settings.icon %}</span>
+          <span class="soy-cat__label">{{ block.settings.label }}</span>
+          {%- if block.settings.sublabel != blank -%}
+            <span class="soy-cat__sub">{{ block.settings.sublabel }}</span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Category Row",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Shop by <em>Category</em>" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#FAF5EC" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "kurta",
+          "options": [
+            { "value": "kurta", "label": "Kurta" },
+            { "value": "dress", "label": "Dress" },
+            { "value": "top", "label": "Top" },
+            { "value": "coord", "label": "Co-ord" },
+            { "value": "tag", "label": "Tag" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "heart", "label": "Heart" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Kurta Sets" },
+        { "type": "text", "id": "sublabel", "label": "Sublabel (optional)" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Category Row",
+      "blocks": [
+        { "type": "category", "settings": { "icon": "kurta", "label": "Kurta Sets" } },
+        { "type": "category", "settings": { "icon": "dress", "label": "Dresses" } },
+        { "type": "category", "settings": { "icon": "top", "label": "Tops & Shirts" } },
+        { "type": "category", "settings": { "icon": "coord", "label": "Co-Ords" } },
+        { "type": "category", "settings": { "icon": "tag", "label": "Last pieces", "sublabel": "Under ₹1299" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

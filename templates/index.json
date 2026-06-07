@@ -1,0 +1,133 @@
+{
+  "sections": {
+    "hero": {
+      "type": "soy-hero",
+      "settings": {
+        "kicker": "The Spring Batik Edit",
+        "title": "<p>Hand-dyed batik, <em>made to fit</em> you</p>",
+        "text": "Breathable cottons and quiet colour, customised to your measurements at no extra cost.",
+        "button_label_1": "Shop the edit",
+        "button_link_1": "shopify://collections/all",
+        "button_label_2": "Explore kurta sets",
+        "button_link_2": "shopify://collections/all",
+        "caption": "on-model · indigo batik kurta · natural daylight"
+      }
+    },
+    "rating": {
+      "type": "soy-rating-strip",
+      "settings": { "score": "4.8", "text": "Loved by 10,000+ customers" }
+    },
+    "favourites": {
+      "type": "soy-product-carousel",
+      "settings": {
+        "title": "Customer <em>favourites</em>",
+        "products_to_show": 8,
+        "view_all_label": "View all",
+        "view_all_link": "shopify://collections/all",
+        "show_fit_tag": true
+      }
+    },
+    "categories": {
+      "type": "soy-category-row",
+      "blocks": {
+        "c1": { "type": "category", "settings": { "icon": "kurta", "label": "Kurta Sets" } },
+        "c2": { "type": "category", "settings": { "icon": "dress", "label": "Dresses" } },
+        "c3": { "type": "category", "settings": { "icon": "top", "label": "Tops & Shirts" } },
+        "c4": { "type": "category", "settings": { "icon": "coord", "label": "Co-Ords" } },
+        "c5": { "type": "category", "settings": { "icon": "tag", "label": "Last pieces", "sublabel": "Under ₹1299" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5"],
+      "settings": { "title": "Shop by <em>Category</em>" }
+    },
+    "occasion": {
+      "type": "soy-occasion-tiles",
+      "blocks": {
+        "o1": { "type": "tile", "settings": { "label": "Office Wear", "bg_color": "#8A9A7B", "caption": "on-model · office kurta" } },
+        "o2": { "type": "tile", "settings": { "label": "Festive", "bg_color": "#25324D", "caption": "on-model · festive anarkali" } },
+        "o3": { "type": "tile", "settings": { "label": "Weekend Easy", "bg_color": "#C25E3A", "caption": "on-model · weekend co-ord" } },
+        "o4": { "type": "tile", "settings": { "label": "Gift with Love", "bg_color": "#E3D8C2", "caption": "flat-lay · gift wrap" } }
+      },
+      "block_order": ["o1", "o2", "o3", "o4"],
+      "settings": { "title": "Handcrafted for every <em>occasion</em>" }
+    },
+    "chips": {
+      "type": "soy-promise-chips",
+      "blocks": {
+        "p1": { "type": "chip", "settings": { "icon": "leaf", "label": "100% Natural Fabrics" } },
+        "p2": { "type": "chip", "settings": { "icon": "scissors", "label": "Complimentary Customization" } },
+        "p3": { "type": "chip", "settings": { "icon": "cod", "label": "COD Available" } },
+        "p4": { "type": "chip", "settings": { "icon": "globe", "label": "Worldwide Shipping" } },
+        "p5": { "type": "chip", "settings": { "icon": "refresh", "label": "Easy 7-Day Returns" } },
+        "p6": { "type": "chip", "settings": { "icon": "shield", "label": "Handcrafted by Artisans" } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4", "p5", "p6"],
+      "settings": { "title": "Our everyday <em>promise</em>" }
+    },
+    "band": {
+      "type": "soy-promise-band",
+      "blocks": {
+        "b1": { "type": "column", "settings": { "icon": "leaf", "title": "Natural fabrics", "text": "Breathable cottons, mul & linen — dyed, never coated." } },
+        "b2": { "type": "column", "settings": { "icon": "wax", "title": "Hand-dyed batik", "text": "Wax-resist patterns drawn by hand, no two exactly alike." } },
+        "b3": { "type": "column", "settings": { "icon": "ruler", "title": "Made to measure", "text": "Complimentary fit customization on every kurta set." } }
+      },
+      "block_order": ["b1", "b2", "b3"],
+      "settings": {
+        "kicker": "Crafted with care",
+        "title": "The SOY <em>Promise</em>",
+        "text": "Every piece begins with a length of natural cotton and an artisan's wax pen. We work with batik karigars across India to make everyday ethnic wear that feels calm, breathes easy, and fits you exactly."
+      }
+    },
+    "reviews": {
+      "type": "soy-reviews",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "name": "Ananya R.", "avatar_color": "#25324D", "title": "The fabric breathes beautifully", "body": "Wore the indigo kurta set through a full workday in Bangalore heat and stayed cool. The batik is even richer in person. Made-to-measure fit was spot on.", "product": "On Indigo Batik Kurta Set", "date": "Mar 2026 · Bengaluru" } },
+        "r2": { "type": "review", "settings": { "name": "Meera K.", "avatar_color": "#8A9A7B", "title": "Customization is a game-changer", "body": "I am between sizes and always struggle. Sent my measurements and the dress fit like it was stitched for me. Will be back for the co-ords.", "product": "On Sage Tiered Midi Dress", "date": "Feb 2026 · Mumbai" } },
+        "r3": { "type": "review", "settings": { "name": "Priya S.", "avatar_color": "#C25E3A", "title": "Beautiful, runs slightly long", "body": "Gorgeous terracotta shade and lovely cotton. I am petite so I got it hemmed — would have loved a shorter option. Still a favourite in my closet.", "product": "On Terracotta Cotton Co-Ord", "date": "Feb 2026 · Delhi" } }
+      },
+      "block_order": ["r1", "r2", "r3"],
+      "settings": {
+        "title": "Customer <em>favourites</em>",
+        "score": "4.8",
+        "count": "1,284 reviews",
+        "distribution": "88,8,3,1,1"
+      }
+    },
+    "instagram": {
+      "type": "soy-instagram",
+      "blocks": {
+        "i1": { "type": "post" }, "i2": { "type": "post" }, "i3": { "type": "post" },
+        "i4": { "type": "post" }, "i5": { "type": "post" }, "i6": { "type": "post" }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5", "i6"],
+      "settings": {
+        "kicker": "#ShadesOfYou",
+        "title": "As worn by <em>you</em>",
+        "text": "Tag us — real customers, real fabric, shoppable.",
+        "handle": "@shadesofyou",
+        "followers": "87.4k followers",
+        "follow_label": "Follow on Instagram"
+      }
+    },
+    "newsletter": {
+      "type": "soy-newsletter",
+      "settings": {
+        "title": "Join the inner <em>threads</em>",
+        "text": "First dibs on new batik drops, and 10% off your first order.",
+        "placeholder": "Your email address",
+        "button_label": "Get 10% off"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "rating",
+    "favourites",
+    "categories",
+    "occasion",
+    "chips",
+    "band",
+    "reviews",
+    "instagram",
+    "newsletter"
+  ]
+}

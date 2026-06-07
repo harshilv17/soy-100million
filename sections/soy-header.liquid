@@ -1,0 +1,163 @@
+{{ 'soy-header.css' | asset_url | stylesheet_tag }}
+
+<div class="soy">
+  {%- if section.settings.announcement != blank -%}
+    <div class="soy-announce">
+      {%- if section.settings.announcement_link != blank -%}
+        <a href="{{ section.settings.announcement_link }}">{{ section.settings.announcement }}</a>
+      {%- else -%}
+        <span>{{ section.settings.announcement }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <header class="soy-header">
+    <input type="checkbox" id="soy-drawer-toggle" class="soy-drawer-toggle" aria-hidden="true">
+
+    <div class="soy-container soy-header__inner">
+      <div class="soy-header__bar">
+        {%- comment %} Burger (mobile) {% endcomment -%}
+        <label for="soy-drawer-toggle" class="soy-burger" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </label>
+
+        {%- comment %} Logo {% endcomment -%}
+        <a href="{{ routes.root_url }}" class="soy-logo">
+          {%- if section.settings.logo != blank -%}
+            {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
+          {%- else -%}
+            <span class="soy-logo__word">{{ section.settings.logo_text | default: shop.name }}</span>
+            {%- if section.settings.logo_subtitle != blank -%}
+              <span class="soy-logo__sub">{{ section.settings.logo_subtitle }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </a>
+
+        {%- comment %} Right icons {% endcomment -%}
+        <div class="soy-header__icons">
+          <a href="{{ routes.search_url }}" class="soy-iconbtn soy-header__search-icon" aria-label="Search">
+            <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+          </a>
+          <a href="{{ routes.account_url }}" class="soy-iconbtn" aria-label="Account">
+            <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          </a>
+          {%- if section.settings.wishlist_link != blank -%}
+            <a href="{{ section.settings.wishlist_link }}" class="soy-iconbtn" aria-label="Wishlist">
+              <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
+            </a>
+          {%- endif -%}
+          <a href="{{ routes.cart_url }}" class="soy-iconbtn" aria-label="Cart">
+            <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+            {%- if cart.item_count > 0 -%}
+              <span class="soy-cart-count">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+
+      {%- comment %} Desktop nav row {% endcomment -%}
+      {%- if section.settings.menu != blank -%}
+        <nav>
+          <ul class="soy-nav">
+            {%- for link in section.settings.menu.links -%}
+              <li class="soy-nav__item">
+                <a href="{{ link.url }}" class="soy-nav__link">
+                  {{ link.title }}
+                  {%- if link.links.size > 0 -%}
+                    <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  {%- endif -%}
+                </a>
+                {%- if link.links.size > 0 -%}
+                  <ul class="soy-nav__sub">
+                    {%- for child in link.links -%}
+                      <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+
+    {%- comment %} Mobile drawer {% endcomment -%}
+    <label for="soy-drawer-toggle" class="soy-drawer__overlay" aria-hidden="true"></label>
+    <aside class="soy-drawer">
+      <label for="soy-drawer-toggle" class="soy-drawer__close" aria-label="Close menu">&times;</label>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="soy-drawer__search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input type="search" name="q" placeholder="Search">
+      </form>
+      {%- if section.settings.menu != blank -%}
+        <ul class="soy-drawer__nav">
+          {%- for link in section.settings.menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </aside>
+  </header>
+</div>
+
+{% schema %}
+{
+  "name": "SOY Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "text",
+      "id": "announcement",
+      "label": "Announcement text",
+      "default": "First order? Get 10% off with code SHADES10"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "Shades of You"
+    },
+    {
+      "type": "text",
+      "id": "logo_subtitle",
+      "label": "Logo subtitle",
+      "default": "Batik · India"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_link",
+      "label": "Wishlist link"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,63 @@
+{{ 'soy-promise.css' | asset_url | stylesheet_tag }}
+
+<section class="soy soy-chips soy-section" style="background: {{ section.settings.bg }};">
+  <div class="soy-container">
+    <div class="soy-section-head">
+      <hr class="soy-rule">
+      <h2 class="soy-title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="soy-chips__grid">
+      {%- for block in section.blocks -%}
+        <div class="soy-chip" {{ block.shopify_attributes }}>
+          <span class="soy-chip__circle">{% render 'soy-icon', name: block.settings.icon %}</span>
+          <span class="soy-chip__label">{{ block.settings.label }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Promise Chips",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Our everyday <em>promise</em>" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#FAF5EC" }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Chip",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "leaf",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "scissors", "label": "Scissors" },
+            { "value": "cod", "label": "COD / wallet" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "refresh", "label": "Returns" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "ruler", "label": "Ruler" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "100% Natural Fabrics" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Promise Chips",
+      "blocks": [
+        { "type": "chip", "settings": { "icon": "leaf", "label": "100% Natural Fabrics" } },
+        { "type": "chip", "settings": { "icon": "scissors", "label": "Complimentary Customization" } },
+        { "type": "chip", "settings": { "icon": "cod", "label": "COD Available" } },
+        { "type": "chip", "settings": { "icon": "globe", "label": "Worldwide Shipping" } },
+        { "type": "chip", "settings": { "icon": "refresh", "label": "Easy 7-Day Returns" } },
+        { "type": "chip", "settings": { "icon": "shield", "label": "Handcrafted by Artisans" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

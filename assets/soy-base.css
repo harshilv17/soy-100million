@@ -1,0 +1,244 @@
+/* =====================================================================
+   SOY — Shades of You · Design tokens + base components
+   Mobile-first. Used by all soy-* homepage sections.
+   ===================================================================== */
+
+:root {
+  /* Brand palette */
+  --soy-indigo: #25324D;
+  --soy-indigo-light: #2F3E5C;
+  --soy-terracotta: #C25E3A;
+  --soy-terracotta-hover: #A84B2B;
+  --soy-ivory: #FAF5EC;
+  --soy-ivory-deep: #F4ECDC;
+  --soy-sage: #8A9A7B;
+  --soy-sage-pale: #ECEFE6;
+  --soy-tan: #EDE6D6;
+  --soy-tan-deep: #E3D8C2;
+  --soy-charcoal: #1F1B16;
+  --soy-stone: #6E6557;
+  --soy-line: #E5DCCD;
+  --soy-card: #FFFDF8;
+
+  /* Fonts */
+  --soy-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --soy-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Layout */
+  --soy-maxw: 1280px;
+  --soy-gutter: 22px;
+  --soy-section-pad: 48px;
+
+  /* Radii */
+  --soy-r-btn: 8px;
+  --soy-r-card: 12px;
+  --soy-r-tile: 14px;
+  --soy-r-badge: 6px;
+
+  /* Shadows */
+  --soy-shadow-rest: 0 1px 2px rgba(37,50,77,.05);
+  --soy-shadow-hover: 0 12px 30px -12px rgba(37,50,77,.28);
+}
+
+@media (min-width: 750px) {
+  :root {
+    --soy-gutter: 64px;
+    --soy-section-pad: 74px;
+  }
+}
+
+/* ---- Base resets scoped to soy sections ---- */
+.soy { color: var(--soy-charcoal); font-family: var(--soy-sans); }
+.soy *,
+.soy *::before,
+.soy *::after { box-sizing: border-box; }
+
+.soy img { display: block; max-width: 100%; height: auto; }
+
+/* Container */
+.soy-container {
+  width: 100%;
+  max-width: var(--soy-maxw);
+  margin-inline: auto;
+  padding-inline: var(--soy-gutter);
+}
+
+/* Section spacing wrapper */
+.soy-section { padding-block: var(--soy-section-pad); }
+
+/* ---- Typography ---- */
+.soy h1, .soy h2, .soy h3,
+.soy .soy-serif {
+  font-family: var(--soy-serif);
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.soy em, .soy .soy-italic { font-style: italic; }
+
+/* Section kicker */
+.soy-kicker {
+  font-family: var(--soy-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--soy-terracotta);
+  margin: 0;
+}
+
+/* Terracotta title rule */
+.soy-rule {
+  width: 32px;
+  height: 2px;
+  background: var(--soy-terracotta);
+  border: 0;
+  margin: 0 auto 14px;
+}
+
+/* Section title (h2) */
+.soy-title {
+  font-family: var(--soy-serif);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.12;
+  color: var(--soy-indigo);
+}
+@media (min-width: 750px) {
+  .soy-title { font-size: 31px; }
+}
+.soy-title em { font-style: italic; }
+
+.soy-section-head { text-align: center; margin-bottom: 26px; }
+@media (min-width: 750px) {
+  .soy-section-head { margin-bottom: 38px; }
+}
+
+/* ---- Buttons ---- */
+.soy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--soy-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  border-radius: var(--soy-r-btn);
+  border: 1.5px solid transparent;
+  padding: 13px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  white-space: nowrap;
+}
+.soy-btn--primary {
+  background: var(--soy-terracotta);
+  color: var(--soy-ivory);
+  border-color: var(--soy-terracotta);
+}
+.soy-btn--primary:hover {
+  background: var(--soy-terracotta-hover);
+  border-color: var(--soy-terracotta-hover);
+}
+.soy-btn--secondary {
+  background: transparent;
+  color: var(--soy-indigo);
+  border-color: var(--soy-indigo);
+}
+.soy-btn--secondary:hover { background: rgba(37,50,77,.06); }
+/* On dark backgrounds */
+.soy-on-dark .soy-btn--secondary {
+  color: var(--soy-ivory);
+  border-color: rgba(250,245,236,.55);
+}
+.soy-on-dark .soy-btn--secondary:hover { background: rgba(250,245,236,.1); }
+
+.soy-btn--sm { font-size: 13px; padding: 9px 16px; }
+.soy-btn--lg { font-size: 15px; padding: 16px 26px; }
+
+/* Text link with arrow */
+.soy-link {
+  font-family: var(--soy-sans);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--soy-terracotta);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.soy-link:hover { color: var(--soy-terracotta-hover); }
+
+/* ---- Badges / chips ---- */
+.soy-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--soy-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: var(--soy-r-badge);
+  line-height: 1;
+}
+.soy-badge--bestseller { background: var(--soy-terracotta); color: var(--soy-ivory); }
+.soy-badge--new { background: transparent; color: var(--soy-indigo); border: 1px solid var(--soy-indigo); }
+.soy-badge--custom { background: var(--soy-sage); color: #fff; }
+.soy-badge--low { background: var(--soy-indigo); color: var(--soy-ivory); }
+
+/* ---- Card primitive ---- */
+.soy-card {
+  background: var(--soy-card);
+  border: 1px solid var(--soy-line);
+  border-radius: var(--soy-r-card);
+  box-shadow: var(--soy-shadow-rest);
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.soy-card:hover {
+  box-shadow: var(--soy-shadow-hover);
+  transform: translateY(-3px);
+}
+
+/* ---- Prices ---- */
+.soy-price { font-family: var(--soy-sans); font-weight: 500; }
+.soy-price__now { color: var(--soy-terracotta); }
+.soy-price__was { color: var(--soy-stone); text-decoration: line-through; font-weight: 400; }
+
+/* ---- Stars ---- */
+.soy-stars { color: var(--soy-terracotta); letter-spacing: 1px; font-size: 13px; line-height: 1; }
+
+/* ---- Icon circle (tan) ---- */
+.soy-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--soy-tan);
+  border-radius: 50%;
+  color: var(--soy-indigo);
+  flex: none;
+}
+.soy-icon-circle svg { width: 46%; height: 46%; stroke: currentColor; fill: none; }
+
+/* Helpers */
+.soy-on-dark { color: var(--soy-ivory); }
+.soy-on-dark .soy-title { color: var(--soy-ivory); }
+.soy-muted { color: var(--soy-stone); }
+.soy-center { text-align: center; }
+
+/* Horizontal scroll row (mobile carousels) */
+.soy-scroller {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.soy-scroller::-webkit-scrollbar { display: none; }
+.soy-scroller > * { scroll-snap-align: start; flex: 0 0 auto; }
+@media (min-width: 990px) {
+  .soy-scroller { gap: 22px; }
+}

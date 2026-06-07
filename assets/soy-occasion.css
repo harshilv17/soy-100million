@@ -1,0 +1,39 @@
+/* SOY occasion tiles */
+.soy-occasion { background: var(--soy-sage-pale); }
+.soy-occasion__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.soy-otile {
+  position: relative;
+  border-radius: var(--soy-r-tile);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  display: block;
+  text-decoration: none;
+  background: var(--soy-sage);
+  box-shadow: var(--soy-shadow-rest);
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.soy-otile:hover { box-shadow: var(--soy-shadow-hover); transform: translateY(-3px); }
+.soy-otile img { width: 100%; height: 100%; object-fit: cover; }
+.soy-otile__ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--soy-sans); font-size: 11px; letter-spacing: .04em;
+  text-transform: lowercase; color: rgba(255,255,255,.7); text-align: center; padding: 12px;
+}
+.soy-otile__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(31,27,22,.62) 8%, rgba(31,27,22,0) 55%);
+}
+.soy-otile__body { position: absolute; left: 14px; bottom: 14px; right: 14px; color: var(--soy-ivory); }
+.soy-otile__label { font-family: var(--soy-serif); font-weight: 400; font-size: 18px; line-height: 1.1; display: block; }
+.soy-otile__cta { font-family: var(--soy-sans); font-weight: 500; font-size: 12px; color: var(--soy-ivory); display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; opacity: .92; }
+
+@media (min-width: 750px) {
+  .soy-occasion__grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .soy-otile { aspect-ratio: 3 / 4.2; }
+  .soy-otile__label { font-size: 21px; }
+}

@@ -1,0 +1,64 @@
+{{ 'soy-occasion.css' | asset_url | stylesheet_tag }}
+
+<section class="soy soy-occasion soy-section" style="background: {{ section.settings.bg }};">
+  <div class="soy-container">
+    <div class="soy-section-head">
+      <hr class="soy-rule">
+      <h2 class="soy-title">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="soy-occasion__grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link }}" class="soy-otile" style="{% if block.settings.bg_color != blank %}background: {{ block.settings.bg_color }};{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 700 | image_tag: alt: block.settings.label, loading: 'lazy' }}
+          {%- else -%}
+            <span class="soy-otile__ph">{{ block.settings.caption }}</span>
+          {%- endif -%}
+          <span class="soy-otile__overlay"></span>
+          <span class="soy-otile__body">
+            <span class="soy-otile__label">{{ block.settings.label }}</span>
+            <span class="soy-otile__cta">{{ block.settings.cta | default: 'Shop now' }} &rsaquo;</span>
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Occasion Tiles",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Handcrafted for every <em>occasion</em>" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#ECEFE6" }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "color", "id": "bg_color", "label": "Fallback colour" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Office Wear" },
+        { "type": "text", "id": "cta", "label": "CTA", "default": "Shop now" },
+        { "type": "text", "id": "caption", "label": "Placeholder caption", "default": "on-model · office kurta" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Occasion Tiles",
+      "blocks": [
+        { "type": "tile", "settings": { "label": "Office Wear", "bg_color": "#8A9A7B", "caption": "on-model · office kurta" } },
+        { "type": "tile", "settings": { "label": "Festive", "bg_color": "#25324D", "caption": "on-model · festive anarkali" } },
+        { "type": "tile", "settings": { "label": "Weekend Easy", "bg_color": "#C25E3A", "caption": "on-model · weekend co-ord" } },
+        { "type": "tile", "settings": { "label": "Gift with Love", "bg_color": "#E3D8C2", "caption": "flat-lay · gift wrap" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

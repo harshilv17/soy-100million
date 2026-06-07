@@ -1,0 +1,111 @@
+/* ===== SOY reviews ===== */
+.soy-reviews { background: var(--soy-ivory); }
+.soy-reviews__summary {
+  background: var(--soy-card);
+  border: 1px solid var(--soy-line);
+  border-radius: var(--soy-r-tile);
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+.soy-reviews__score { text-align: center; }
+.soy-reviews__num { font-family: var(--soy-serif); font-weight: 400; font-size: 46px; line-height: 1; color: var(--soy-indigo); }
+.soy-reviews__count { font-family: var(--soy-sans); font-size: 12px; color: var(--soy-stone); margin-top: 6px; }
+.soy-bars { display: flex; flex-direction: column; gap: 7px; }
+.soy-bar { display: flex; align-items: center; gap: 8px; font-family: var(--soy-sans); font-size: 11px; color: var(--soy-stone); }
+.soy-bar__star { width: 10px; text-align: right; }
+.soy-bar__track { flex: 1; height: 6px; border-radius: 4px; background: var(--soy-ivory-deep); overflow: hidden; }
+.soy-bar__fill { height: 100%; background: var(--soy-terracotta); border-radius: 4px; }
+.soy-bar__pct { width: 30px; text-align: right; }
+
+.soy-reviews__cards {
+  display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding-bottom: 6px;
+}
+.soy-reviews__cards::-webkit-scrollbar { display: none; }
+.soy-review {
+  scroll-snap-align: start; flex: 0 0 82%;
+  background: var(--soy-card); border: 1px solid var(--soy-line);
+  border-radius: var(--soy-r-card); box-shadow: var(--soy-shadow-rest);
+  padding: 16px; display: flex; flex-direction: column; gap: 9px;
+}
+.soy-review__head { display: flex; align-items: center; gap: 10px; }
+.soy-review__avatar { width: 34px; height: 34px; border-radius: 50%; flex: none; background: var(--soy-sage); }
+.soy-review__name { font-family: var(--soy-sans); font-weight: 600; font-size: 13px; color: var(--soy-charcoal); }
+.soy-review__verified { font-family: var(--soy-sans); font-size: 11px; color: var(--soy-sage); display: inline-flex; align-items: center; gap: 3px; }
+.soy-review__title { font-family: var(--soy-serif); font-weight: 400; font-size: 16px; color: var(--soy-indigo); margin: 2px 0 0; }
+.soy-review__body { font-family: var(--soy-sans); font-size: 13px; line-height: 1.55; color: var(--soy-stone); margin: 0; }
+.soy-review__photo {
+  aspect-ratio: 16 / 7; border-radius: 8px; background: var(--soy-tan-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--soy-sans); font-size: 11px; color: var(--soy-stone); margin-top: 2px;
+}
+.soy-review__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.soy-review__meta { font-family: var(--soy-sans); font-size: 11px; color: var(--soy-stone); display: flex; justify-content: space-between; gap: 8px; margin-top: auto; }
+
+@media (min-width: 750px) {
+  .soy-reviews__summary { grid-template-columns: 200px 1fr; gap: 40px; padding: 26px 32px; }
+  .soy-reviews__score { border-right: 1px solid var(--soy-line); padding-right: 32px; }
+  .soy-reviews__num { font-size: 56px; }
+  .soy-reviews__cards { gap: 22px; }
+  .soy-review { flex-basis: calc((100% - 2 * 22px) / 3); }
+}
+
+/* ===== SOY instagram ===== */
+.soy-insta { background: var(--soy-ivory); }
+.soy-insta__head { text-align: center; margin-bottom: 24px; }
+.soy-insta__kicker {
+  font-family: var(--soy-sans); font-weight: 500; font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--soy-terracotta); margin: 0 0 10px;
+}
+.soy-insta__title { font-family: var(--soy-serif); font-weight: 400; font-size: 24px; color: var(--soy-indigo); margin: 0 0 8px; }
+.soy-insta__title em { font-style: italic; }
+.soy-insta__text { font-family: var(--soy-sans); font-size: 13px; color: var(--soy-stone); margin: 0; }
+@media (min-width: 750px) { .soy-insta__title { font-size: 30px; } .soy-insta__text { font-size: 14px; } }
+
+.soy-insta__grid { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+.soy-insta__grid::-webkit-scrollbar { display: none; }
+.soy-igtile {
+  position: relative; flex: 0 0 46%; aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+  background: var(--soy-tan-deep); scroll-snap-align: start; text-decoration: none; display: block;
+}
+.soy-igtile img { width: 100%; height: 100%; object-fit: cover; }
+.soy-igtile__ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--soy-sans); font-size: 10px; color: rgba(255,255,255,.7); text-transform: lowercase; }
+.soy-igtile__cart {
+  position: absolute; bottom: 8px; right: 8px; width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(255,253,248,.92); display: inline-flex; align-items: center; justify-content: center; color: var(--soy-indigo);
+}
+.soy-igtile__cart svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+
+.soy-insta__follow {
+  display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+  margin-top: 20px; background: var(--soy-sage-pale); border-radius: var(--soy-r-tile); padding: 16px;
+}
+.soy-insta__handle { font-family: var(--soy-sans); font-weight: 500; font-size: 13px; color: var(--soy-charcoal); display: inline-flex; align-items: center; gap: 8px; }
+.soy-insta__handle small { color: var(--soy-stone); font-weight: 400; }
+
+@media (min-width: 750px) {
+  .soy-insta__grid { gap: 14px; }
+  .soy-igtile { flex-basis: calc((100% - 5 * 14px) / 6); }
+}
+
+/* ===== SOY newsletter ===== */
+.soy-news { background: var(--soy-sage-pale); }
+.soy-news__inner { max-width: 540px; margin: 0 auto; text-align: center; }
+.soy-news__title { font-family: var(--soy-serif); font-weight: 400; font-size: 26px; color: var(--soy-indigo); margin: 0 0 10px; }
+.soy-news__title em { font-style: italic; }
+.soy-news__text { font-family: var(--soy-sans); font-size: 14px; color: var(--soy-stone); margin: 0 0 22px; line-height: 1.5; }
+.soy-news__form { display: flex; gap: 10px; flex-direction: column; }
+.soy-news__input {
+  flex: 1; border: 1px solid var(--soy-line); border-radius: var(--soy-r-btn);
+  background: var(--soy-card); padding: 13px 14px; font-family: var(--soy-sans); font-size: 14px; color: var(--soy-charcoal);
+}
+.soy-news__input::placeholder { color: var(--soy-stone); }
+.soy-news__note { font-family: var(--soy-sans); font-size: 12px; color: var(--soy-sage); margin: 12px 0 0; }
+@media (min-width: 600px) {
+  .soy-news__form { flex-direction: row; }
+  .soy-news__title { font-size: 30px; }
+}

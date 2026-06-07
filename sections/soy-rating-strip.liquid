@@ -1,0 +1,44 @@
+{% style %}
+  .soy-ratingstrip {
+    background: {{ section.settings.bg }};
+    border-bottom: 1px solid var(--soy-line);
+  }
+  .soy-ratingstrip__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-block: 13px;
+    font-family: var(--soy-sans);
+    font-size: 13px;
+    color: var(--soy-stone);
+  }
+  .soy-ratingstrip__score { color: var(--soy-charcoal); font-weight: 600; }
+  .soy-ratingstrip__sep { color: var(--soy-line); }
+  @media (min-width: 750px) { .soy-ratingstrip__row { font-size: 14px; gap: 16px; } }
+{% endstyle %}
+
+<section class="soy soy-ratingstrip">
+  <div class="soy-container">
+    <div class="soy-ratingstrip__row">
+      <span class="soy-stars" aria-hidden="true">★★★★★</span>
+      <span class="soy-ratingstrip__score">{{ section.settings.score }}</span>
+      <span class="soy-ratingstrip__sep">|</span>
+      <span>{{ section.settings.text }}</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Rating Strip",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "score", "label": "Score", "default": "4.8" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Loved by 10,000+ customers" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#FAF5EC" }
+  ],
+  "presets": [{ "name": "SOY Rating Strip" }]
+}
+{% endschema %}

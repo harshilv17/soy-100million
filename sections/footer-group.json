@@ -1,0 +1,26 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "soy-footer": {
+      "type": "soy-footer",
+      "blocks": {
+        "shop": { "type": "menu", "settings": { "heading": "Shop", "menu": "footer" } },
+        "help": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } },
+        "brand": { "type": "menu", "settings": { "heading": "The Brand", "menu": "footer" } }
+      },
+      "block_order": ["shop", "help", "brand"],
+      "settings": {
+        "logo_text": "Shades of You",
+        "logo_subtitle": "Batik · India",
+        "tagline": "Hand-dyed batik everyday ethnic wear in natural fabrics. Made to measure, made to last.",
+        "whatsapp_label": "Chat on WhatsApp",
+        "secure_text": "100% secure checkout",
+        "payments": "VISA, MASTERCARD, UPI, RUPAY, PAYTM"
+      }
+    }
+  },
+  "order": [
+    "soy-footer"
+  ]
+}

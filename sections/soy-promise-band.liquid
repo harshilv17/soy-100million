@@ -1,0 +1,69 @@
+{{ 'soy-promise.css' | asset_url | stylesheet_tag }}
+
+<section class="soy soy-on-dark soy-band soy-section">
+  <div class="soy-container">
+    <div class="soy-band__head">
+      {%- if section.settings.kicker != blank -%}
+        <p class="soy-band__kicker">{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      <h2 class="soy-band__title">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="soy-band__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="soy-band__cols">
+      {%- for block in section.blocks -%}
+        <div class="soy-pcol" {{ block.shopify_attributes }}>
+          <span class="soy-pcol__icon">{% render 'soy-icon', name: block.settings.icon %}</span>
+          <div>
+            <h3 class="soy-pcol__title">{{ block.settings.title }}</h3>
+            <p class="soy-pcol__text">{{ block.settings.text }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Promise Band",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Crafted with care" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The SOY <em>Promise</em>" },
+    { "type": "textarea", "id": "text", "label": "Subtext", "default": "Every piece begins with a length of natural cotton and an artisan's wax pen. We work with batik karigars across India to make everyday ethnic wear that feels calm, breathes easy, and fits you exactly." }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "leaf",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "wax", "label": "Wax pen" },
+            { "value": "ruler", "label": "Ruler" },
+            { "value": "scissors", "label": "Scissors" },
+            { "value": "heart", "label": "Heart" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Natural fabrics" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Breathable cottons, mul & linen — dyed, never coated." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Promise Band",
+      "blocks": [
+        { "type": "column", "settings": { "icon": "leaf", "title": "Natural fabrics", "text": "Breathable cottons, mul & linen — dyed, never coated." } },
+        { "type": "column", "settings": { "icon": "wax", "title": "Hand-dyed batik", "text": "Wax-resist patterns drawn by hand, no two exactly alike." } },
+        { "type": "column", "settings": { "icon": "ruler", "title": "Made to measure", "text": "Complimentary fit customization on every kurta set." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

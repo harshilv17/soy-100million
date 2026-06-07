@@ -1,0 +1,80 @@
+/* SOY hero */
+.soy-hero {
+  background: var(--soy-indigo);
+  background-image:
+    radial-gradient(rgba(250,245,236,.05) 1px, transparent 1.4px);
+  background-size: 18px 18px;
+  color: var(--soy-ivory);
+  position: relative;
+  overflow: hidden;
+}
+.soy-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 26px;
+  align-items: center;
+  padding-block: 46px;
+}
+.soy-hero__kicker {
+  color: var(--soy-terracotta);
+  font-family: var(--soy-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.soy-hero__title {
+  font-family: var(--soy-serif);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.05;
+  color: var(--soy-ivory);
+  margin: 0 0 16px;
+}
+.soy-hero__title em { font-style: italic; }
+.soy-hero__text {
+  font-family: var(--soy-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(250,245,236,.82);
+  max-width: 30em;
+  margin: 0 0 24px;
+}
+.soy-hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Side image / texture panel */
+.soy-hero__media {
+  border-radius: var(--soy-r-tile);
+  overflow: hidden;
+  background: var(--soy-indigo-light);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(250,245,236,.04) 0 2px, transparent 2px 12px);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px;
+}
+.soy-hero__media img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--soy-r-tile); }
+.soy-hero__caption {
+  font-family: var(--soy-sans);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: lowercase;
+  color: rgba(250,245,236,.5);
+}
+
+@media (min-width: 990px) {
+  .soy-hero__grid {
+    grid-template-columns: 1.05fr .95fr;
+    gap: 48px;
+    padding-block: 0;
+    min-height: 460px;
+  }
+  .soy-hero__title { font-size: 58px; margin-bottom: 18px; }
+  .soy-hero__text { font-size: 16px; margin-bottom: 28px; }
+  .soy-hero__media { aspect-ratio: auto; align-self: stretch; min-height: 460px; margin-block: 28px; }
+  .soy-hero--no-media .soy-hero__grid { grid-template-columns: 1fr; min-height: 380px; }
+  .soy-hero--no-media .soy-hero__inner { max-width: 640px; }
+}

@@ -1,0 +1,102 @@
+{{ 'soy-community.css' | asset_url | stylesheet_tag }}
+
+<section class="soy soy-reviews soy-section" style="background: {{ section.settings.bg }};">
+  <div class="soy-container">
+    <div class="soy-section-head">
+      <hr class="soy-rule">
+      <h2 class="soy-title">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="soy-reviews__summary">
+      <div class="soy-reviews__score">
+        <div class="soy-reviews__num">{{ section.settings.score }}</div>
+        <div class="soy-stars">★★★★★</div>
+        <div class="soy-reviews__count">{{ section.settings.count }}</div>
+      </div>
+      <div class="soy-bars">
+        {%- assign pcts = section.settings.distribution | split: ',' -%}
+        {%- for star in (5..1) reversed -%}
+          {%- assign idx = 5 | minus: star -%}
+          {%- assign pct = pcts[idx] | default: 0 | strip -%}
+          <div class="soy-bar">
+            <span class="soy-bar__star">{{ star }}</span>
+            <span class="soy-stars" style="font-size:10px;">★</span>
+            <span class="soy-bar__track"><span class="soy-bar__fill" style="width: {{ pct }}%;"></span></span>
+            <span class="soy-bar__pct">{{ pct }}%</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="soy-reviews__cards">
+      {%- for block in section.blocks -%}
+        <article class="soy-review" {{ block.shopify_attributes }}>
+          <div class="soy-review__head">
+            <span class="soy-review__avatar" style="{% if block.settings.avatar_color != blank %}background: {{ block.settings.avatar_color }};{% endif %}"></span>
+            <div>
+              <div class="soy-review__name">{{ block.settings.name }}</div>
+              {%- if block.settings.verified -%}
+                <span class="soy-review__verified">✓ Verified buyer</span>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="soy-stars">★★★★★</div>
+          <h3 class="soy-review__title">{{ block.settings.title }}</h3>
+          <p class="soy-review__body">{{ block.settings.body }}</p>
+          <div class="soy-review__photo">
+            {%- if block.settings.photo != blank -%}
+              {{ block.settings.photo | image_url: width: 500 | image_tag: alt: block.settings.name, loading: 'lazy' }}
+            {%- else -%}
+              customer photo
+            {%- endif -%}
+          </div>
+          <div class="soy-review__meta">
+            <span>{{ block.settings.product }}</span>
+            <span>{{ block.settings.date }}</span>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Reviews",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Customer <em>favourites</em>" },
+    { "type": "text", "id": "score", "label": "Score", "default": "4.8" },
+    { "type": "text", "id": "count", "label": "Count label", "default": "1,284 reviews" },
+    { "type": "text", "id": "distribution", "label": "Star distribution (5★→1★ %)", "default": "88,8,3,1,1" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#FAF5EC" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Ananya R." },
+        { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true },
+        { "type": "color", "id": "avatar_color", "label": "Avatar colour" },
+        { "type": "text", "id": "title", "label": "Review title", "default": "The fabric breathes beautifully" },
+        { "type": "textarea", "id": "body", "label": "Review body", "default": "Wore the indigo kurta set through a full workday in Bangalore heat and stayed cool. Made-to-measure fit was spot on." },
+        { "type": "image_picker", "id": "photo", "label": "Customer photo" },
+        { "type": "text", "id": "product", "label": "Product", "default": "On Indigo Batik Kurta Set" },
+        { "type": "text", "id": "date", "label": "Date / place", "default": "Mar 2026 · Bengaluru" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Reviews",
+      "blocks": [
+        { "type": "review", "settings": { "name": "Ananya R.", "avatar_color": "#25324D", "title": "The fabric breathes beautifully", "body": "Wore the indigo kurta set through a full workday in Bangalore heat and stayed cool. The batik is even richer in person. Made-to-measure fit was spot on.", "product": "On Indigo Batik Kurta Set", "date": "Mar 2026 · Bengaluru" } },
+        { "type": "review", "settings": { "name": "Meera K.", "avatar_color": "#8A9A7B", "title": "Customization is a game-changer", "body": "I am between sizes and always struggle. Sent my measurements and the dress fit like it was stitched for me. Will be back for the co-ords.", "product": "On Sage Tiered Midi Dress", "date": "Feb 2026 · Mumbai" } },
+        { "type": "review", "settings": { "name": "Priya S.", "avatar_color": "#C25E3A", "title": "Beautiful, runs slightly long", "body": "Gorgeous terracotta shade and lovely cotton. I am petite so I got it hemmed — would have loved a shorter option. Still a favourite in my closet.", "product": "On Terracotta Cotton Co-Ord", "date": "Feb 2026 · Delhi" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

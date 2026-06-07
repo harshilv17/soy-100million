@@ -1,0 +1,64 @@
+/* SOY promise chips */
+.soy-chips { background: var(--soy-ivory); }
+.soy-chips__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px 8px;
+}
+.soy-chip {
+  flex: 0 0 calc((100% - 2 * 8px) / 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  text-align: center;
+}
+.soy-chip__circle {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--soy-tan);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--soy-sage);
+}
+.soy-chip__circle svg { width: 22px; height: 22px; }
+.soy-chip__label { font-family: var(--soy-sans); font-size: 11.5px; line-height: 1.3; color: var(--soy-stone); max-width: 11em; }
+
+@media (min-width: 750px) {
+  .soy-chips__grid { flex-wrap: nowrap; gap: 14px; }
+  .soy-chip { flex: 1 1 0; }
+  .soy-chip__circle { width: 54px; height: 54px; }
+  .soy-chip__circle svg { width: 26px; height: 26px; }
+  .soy-chip__label { font-size: 12px; }
+}
+
+/* SOY promise band */
+.soy-band {
+  background: var(--soy-indigo);
+  background-image: linear-gradient(160deg, var(--soy-indigo) 0%, var(--soy-indigo-light) 100%);
+  color: var(--soy-ivory);
+}
+.soy-band__head { text-align: center; max-width: 640px; margin: 0 auto 34px; }
+.soy-band__kicker {
+  font-family: var(--soy-sans); font-weight: 500; font-size: 12px;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--soy-terracotta); margin: 0 0 12px;
+}
+.soy-band__title { font-family: var(--soy-serif); font-weight: 400; font-size: 28px; line-height: 1.12; margin: 0 0 14px; }
+.soy-band__title em { font-style: italic; }
+.soy-band__text { font-family: var(--soy-sans); font-size: 14px; line-height: 1.6; color: rgba(250,245,236,.8); margin: 0; }
+@media (min-width: 750px) { .soy-band__title { font-size: 32px; } .soy-band__text { font-size: 15px; } }
+
+.soy-band__cols { display: grid; grid-template-columns: 1fr; gap: 22px; }
+.soy-pcol { display: flex; gap: 14px; align-items: flex-start; }
+.soy-pcol__icon {
+  width: 44px; height: 44px; border-radius: 50%; flex: none;
+  background: rgba(250,245,236,.08);
+  border: 1px solid rgba(250,245,236,.16);
+  display: inline-flex; align-items: center; justify-content: center; color: var(--soy-ivory);
+}
+.soy-pcol__icon svg { width: 21px; height: 21px; }
+.soy-pcol__title { font-family: var(--soy-sans); font-weight: 600; font-size: 14px; margin: 2px 0 5px; color: var(--soy-ivory); }
+.soy-pcol__text { font-family: var(--soy-sans); font-size: 13px; line-height: 1.55; color: rgba(250,245,236,.72); margin: 0; }
+
+@media (min-width: 750px) {
+  .soy-band__cols { grid-template-columns: repeat(3, 1fr); gap: 34px; }
+}

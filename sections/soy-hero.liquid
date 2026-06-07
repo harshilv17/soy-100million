@@ -1,0 +1,54 @@
+{{ 'soy-hero.css' | asset_url | stylesheet_tag }}
+
+<section class="soy soy-on-dark soy-hero {% unless section.settings.image %}soy-hero--no-media{% endunless %}">
+  <div class="soy-container">
+    <div class="soy-hero__grid">
+      <div class="soy-hero__inner">
+        {%- if section.settings.kicker != blank -%}
+          <p class="soy-hero__kicker">{{ section.settings.kicker }}</p>
+        {%- endif -%}
+        <h1 class="soy-hero__title">{{ section.settings.title }}</h1>
+        {%- if section.settings.text != blank -%}
+          <p class="soy-hero__text">{{ section.settings.text }}</p>
+        {%- endif -%}
+        <div class="soy-hero__cta">
+          {%- if section.settings.button_label_1 != blank -%}
+            <a href="{{ section.settings.button_link_1 }}" class="soy-btn soy-btn--primary soy-btn--lg">{{ section.settings.button_label_1 }}</a>
+          {%- endif -%}
+          {%- if section.settings.button_label_2 != blank -%}
+            <a href="{{ section.settings.button_link_2 }}" class="soy-btn soy-btn--secondary soy-btn--lg">{{ section.settings.button_label_2 }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if section.settings.image != blank -%}
+        <div class="soy-hero__media">
+          {{ section.settings.image | image_url: width: 1200 | image_tag: alt: section.settings.title, loading: 'eager' }}
+        </div>
+      {%- elsif section.settings.caption != blank -%}
+        <div class="soy-hero__media">
+          <span class="soy-hero__caption">{{ section.settings.caption }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "The Spring Batik Edit" },
+    { "type": "richtext", "id": "title", "label": "Headline", "default": "<p>Hand-dyed batik, <em>made to fit</em> you</p>" },
+    { "type": "textarea", "id": "text", "label": "Subtext", "default": "Breathable cottons and quiet colour, customised to your measurements at no extra cost." },
+    { "type": "text", "id": "button_label_1", "label": "Primary button label", "default": "Shop the edit" },
+    { "type": "url", "id": "button_link_1", "label": "Primary button link" },
+    { "type": "text", "id": "button_label_2", "label": "Secondary button label", "default": "Explore kurta sets" },
+    { "type": "url", "id": "button_link_2", "label": "Secondary button link" },
+    { "type": "image_picker", "id": "image", "label": "Hero image (optional)" },
+    { "type": "text", "id": "caption", "label": "Placeholder caption (when no image)", "default": "on-model · indigo batik kurta · natural daylight" }
+  ],
+  "presets": [{ "name": "SOY Hero" }]
+}
+{% endschema %}

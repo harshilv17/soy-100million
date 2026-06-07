@@ -1,0 +1,18 @@
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "soy-header": {
+      "type": "soy-header",
+      "settings": {
+        "announcement": "First order? Get 10% off with code SHADES10",
+        "logo_text": "Shades of You",
+        "logo_subtitle": "Batik · India",
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": [
+    "soy-header"
+  ]
+}
