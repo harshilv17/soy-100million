@@ -1,0 +1,102 @@
+{%- comment -%}
+  SOY product card — reusable component.
+  Params:
+    product           (object)  Shopify product. If blank, renders nothing.
+    index             (number)  used to vary placeholder colour. Default 0.
+    show_fit          (bool)    show "Made-to-fit" when product tagged 'made-to-fit'. Default true.
+    budget_max        (number)  rupee threshold for "Under ₹N" tag. Default 1299.
+    low_threshold     (number)  low-stock badge threshold. Default 5.
+  Badges/states are driven by product tags: bestseller, new, customizable, made-to-fit.
+{%- endcomment -%}
+
+{%- liquid
+  assign idx = index | default: 0
+  assign show_fit = show_fit | default: true, allow_false: true
+  assign budget_max = budget_max | default: 1299
+  assign low_threshold = low_threshold | default: 5
+
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+    assign pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
+  endif
+
+  assign budget_cents = budget_max | times: 100
+  assign first_variant = product.selected_or_first_available_variant
+  assign second_image = product.images[1]
+-%}
+
+<a href="{{ product.url }}" class="soy-pcard" data-soy-card>
+  <div class="soy-pcard__media">
+    {%- if product.featured_image -%}
+      <img class="soy-pcard__img soy-pcard__img--primary" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy" width="600" height="750">
+      {%- if second_image -%}
+        <img class="soy-pcard__img soy-pcard__img--secondary" src="{{ second_image | image_url: width: 600 }}" alt="" loading="lazy" width="600" height="750">
+      {%- endif -%}
+    {%- else -%}
+      <span class="soy-pcard__ph soy-pcard__ph--{{ idx | modulo: 5 }}"></span>
+      <span class="soy-pcard__phtag">on-model · front</span>
+    {%- endif -%}
+
+    <div class="soy-pcard__badges">
+      {%- if product.tags contains 'bestseller' -%}<span class="soy-badge soy-badge--bestseller">Bestseller</span>{%- endif -%}
+      {%- if product.tags contains 'new' -%}<span class="soy-badge soy-badge--new">New in</span>{%- endif -%}
+      {%- if product.tags contains 'customizable' -%}
+        <span class="soy-badge soy-badge--custom">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l2.2 5.6L20 9.2l-4 3.9 1 6-5-3-5 3 1-6-4-3.9 5.8-.6z"/></svg>Customizable
+        </span>
+      {%- endif -%}
+    </div>
+
+    <button type="button" class="soy-pcard__wish" aria-label="Add to wishlist" data-soy-wish>
+      <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
+    </button>
+
+    {%- if first_variant.inventory_management != blank and first_variant.inventory_quantity > 0 and first_variant.inventory_quantity <= low_threshold -%}
+      <span class="soy-pcard__lowpill">Only {{ first_variant.inventory_quantity }} left</span>
+    {%- endif -%}
+  </div>
+
+  <div class="soy-pcard__body">
+    {%- assign rating = product.metafields.reviews.rating.value -%}
+    {%- if rating -%}
+      <div class="soy-pcard__rating">
+        <span class="soy-stars">★★★★★</span>
+        <span>{{ rating | round: 1 }}{% if product.metafields.reviews.rating_count %} ({{ product.metafields.reviews.rating_count }}){% endif %}</span>
+      </div>
+    {%- endif -%}
+
+    <h3 class="soy-pcard__name">{{ product.title }}</h3>
+
+    <div class="soy-pcard__pricerow">
+      <span class="soy-pcard__now">{{ product.price | money }}</span>
+      {%- if on_sale -%}
+        <span class="soy-pcard__was">{{ product.compare_at_price | money }}</span>
+        <span class="soy-pcard__off">{{ pct }}% off</span>
+      {%- endif -%}
+      {%- if show_fit and product.tags contains 'made-to-fit' -%}
+        <span class="soy-pcard__fit">
+          <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>Made-to-fit
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- if product.price <= budget_cents -%}
+      <span class="soy-pcard__tag">
+        <svg viewBox="0 0 24 24"><path d="M3 12V4h8l9 9-8 8-9-9Z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>
+        Under ₹{{ budget_max }}
+      </span>
+    {%- endif -%}
+
+    {%- for option in product.options_with_values -%}
+      {%- if option.name == 'Color' or option.name == 'Colour' -%}
+        <div class="soy-pcard__swatches">
+          {%- for value in option.values limit: 5 -%}
+            <span class="soy-swatch" style="background: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}var(--soy-tan-deep){% endif %};"></span>
+          {%- endfor -%}
+          {%- if option.values.size > 5 -%}<span class="soy-swatch--more">+{{ option.values.size | minus: 5 }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</a>

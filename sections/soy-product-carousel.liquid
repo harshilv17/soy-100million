@@ -1,4 +1,6 @@
+{{ 'soy-product-card.css' | asset_url | stylesheet_tag }}
 {{ 'soy-product-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'soy-wishlist.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign coll = section.settings.collection
@@ -23,109 +25,19 @@
     <div class="soy-pcarousel__track">
       {%- if coll != blank and coll.products_count > 0 -%}
         {%- for product in coll.products limit: limit -%}
-          {%- liquid
-            assign on_sale = false
-            if product.compare_at_price > product.price
-              assign on_sale = true
-              assign pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
-            endif
-          -%}
-          <a href="{{ product.url }}" class="soy-pcard">
-            <div class="soy-pcard__media">
-              {%- if product.featured_image -%}
-                {{ product.featured_image | image_url: width: 600 | image_tag: alt: product.title, loading: 'lazy' }}
-              {%- else -%}
-                <span class="soy-pcard__ph soy-pcard__ph--{{ forloop.index0 | modulo: 5 }}">{{ product.title }}</span>
-              {%- endif -%}
-
-              <div class="soy-pcard__badges">
-                {%- if product.tags contains 'bestseller' -%}<span class="soy-badge soy-badge--bestseller">Bestseller</span>{%- endif -%}
-                {%- if product.tags contains 'new' -%}<span class="soy-badge soy-badge--new">New in</span>{%- endif -%}
-                {%- if product.tags contains 'customizable' -%}<span class="soy-badge soy-badge--custom">Customizable</span>{%- endif -%}
-              </div>
-
-              <span class="soy-pcard__wish" aria-hidden="true">
-                <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
-              </span>
-
-              {%- assign first_variant = product.selected_or_first_available_variant -%}
-              {%- if first_variant.inventory_management != blank and first_variant.inventory_quantity > 0 and first_variant.inventory_quantity <= section.settings.low_stock_threshold -%}
-                <span class="soy-badge soy-badge--low soy-pcard__lowbadge">Only {{ first_variant.inventory_quantity }} left</span>
-              {%- endif -%}
-            </div>
-
-            <div class="soy-pcard__body">
-              {%- assign rating = product.metafields.reviews.rating.value -%}
-              {%- if rating -%}
-                <div class="soy-pcard__rating">
-                  <span class="soy-stars">★★★★★</span>
-                  <span>{{ rating | round: 1 }}{% if product.metafields.reviews.rating_count %} ({{ product.metafields.reviews.rating_count }}){% endif %}</span>
-                </div>
-              {%- endif -%}
-
-              <h3 class="soy-pcard__name">{{ product.title }}</h3>
-
-              <div class="soy-pcard__pricerow">
-                <span class="soy-pcard__now">{{ product.price | money }}</span>
-                {%- if on_sale -%}
-                  <span class="soy-pcard__was">{{ product.compare_at_price | money }}</span>
-                  <span class="soy-pcard__off">{{ pct }}% off</span>
-                {%- endif -%}
-              </div>
-
-              {%- for option in product.options_with_values -%}
-                {%- if option.name == 'Color' or option.name == 'Colour' -%}
-                  <div class="soy-pcard__swatches">
-                    {%- for value in option.values limit: 5 -%}
-                      <span class="soy-swatch" style="background: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}var(--soy-tan-deep){% endif %};"></span>
-                    {%- endfor -%}
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-
-              {%- if section.settings.show_fit_tag -%}
-                <span class="soy-pcard__fit">✚ Made to fit</span>
-              {%- endif -%}
-            </div>
-          </a>
+          {%- render 'soy-product-card',
+              product: product,
+              index: forloop.index0,
+              show_fit: section.settings.show_fit_tag,
+              low_threshold: section.settings.low_stock_threshold -%}
         {%- endfor -%}
-
       {%- else -%}
-        {%- comment %} Onboarding placeholders {% endcomment -%}
-        {%- assign demo_titles = 'Indigo Batik Kurta Set,Terracotta Cotton Co-Ord,Sage Tiered Midi Dress,Indigo Wide-Leg Co-Ord,Festive Batik Set' | split: ',' -%}
-        {%- assign demo_badges = 'bestseller,new,custom,bestseller,bestseller' | split: ',' -%}
-        {%- for i in (0..4) -%}
-          <div class="soy-pcard">
-            <div class="soy-pcard__media">
-              <span class="soy-pcard__ph soy-pcard__ph--{{ i }}">on-model · {{ demo_titles[i] | downcase }}</span>
-              <div class="soy-pcard__badges">
-                {%- assign b = demo_badges[i] -%}
-                {%- if b == 'bestseller' -%}<span class="soy-badge soy-badge--bestseller">Bestseller</span>{%- endif -%}
-                {%- if b == 'new' -%}<span class="soy-badge soy-badge--new">New in</span>{%- endif -%}
-                {%- if b == 'custom' -%}<span class="soy-badge soy-badge--custom">Customizable</span>{%- endif -%}
-              </div>
-              <span class="soy-pcard__wish" aria-hidden="true">
-                <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
-              </span>
-              {%- if i == 4 -%}<span class="soy-badge soy-badge--low soy-pcard__lowbadge">Only 3 left</span>{%- endif -%}
-            </div>
-            <div class="soy-pcard__body">
-              <div class="soy-pcard__rating"><span class="soy-stars">★★★★★</span><span>4.9 ({{ 60 | plus: i | times: 3 }})</span></div>
-              <h3 class="soy-pcard__name">{{ demo_titles[i] }}</h3>
-              <div class="soy-pcard__pricerow">
-                <span class="soy-pcard__now">₹2,{{ 099 | plus: i }}</span>
-                <span class="soy-pcard__was">₹2,999</span>
-                <span class="soy-pcard__off">30% off</span>
-              </div>
-              <div class="soy-pcard__swatches">
-                <span class="soy-swatch" style="background:var(--soy-indigo);"></span>
-                <span class="soy-swatch" style="background:var(--soy-terracotta);"></span>
-                <span class="soy-swatch" style="background:var(--soy-sage);"></span>
-              </div>
-              {%- if section.settings.show_fit_tag -%}<span class="soy-pcard__fit">✚ Made to fit</span>{%- endif -%}
-            </div>
-          </div>
-        {%- endfor -%}
+        {%- comment %} Onboarding placeholders matching the card component {% endcomment -%}
+        {%- render 'soy-product-card-demo', i: 0, name: 'Sage Batik Kurta Set', badge: 'bestseller', rating: '4.9', count: 214, price: '2,499', was: '3,299', off: 24, extra: 'fit', view: 'front', swatches: '#8A9A7B,#25324D,#1F1B16' -%}
+        {%- render 'soy-product-card-demo', i: 1, name: 'Bagru Print Co-Ord Set', badge: 'new', active_wish: true, rating: '4.7', count: 86, price: '2,199', was: '2,799', off: 21, extra: 'fit', view: 'side', swatches: '#8A9A7B,#E3D8C2' -%}
+        {%- render 'soy-product-card-demo', i: 2, name: 'Sage Dabu Tiered Set', badge: 'custom', rating: '4.8', count: 142, price: '1,899', was: '2,499', off: 24, extra: 'fit', view: 'courtyard', swatches: '#8A9A7B,#25324D' -%}
+        {%- render 'soy-product-card-demo', i: 3, name: 'Block-Print Cotton Top', rating: '4.6', count: 58, price: '1,099', was: '1,499', off: 27, extra: 'under', view: 'back', swatches: '#8A9A7B,#E3D8C2' -%}
+        {%- render 'soy-product-card-demo', i: 1, name: 'Festive Batik Anarkali', badge: 'bestseller', rating: '5', count: 63, price: '3,499', was: '4,299', off: 19, extra: 'low', low_n: 3, view: 'courtyard', swatches: '#8A9A7B,#25324D' -%}
       {%- endif -%}
     </div>
   </div>
@@ -142,7 +54,7 @@
     { "type": "range", "id": "products_to_show", "min": 4, "max": 12, "step": 1, "label": "Products to show", "default": 8 },
     { "type": "text", "id": "view_all_label", "label": "View-all label", "default": "View all" },
     { "type": "url", "id": "view_all_link", "label": "View-all link" },
-    { "type": "checkbox", "id": "show_fit_tag", "label": "Show 'Made to fit' tag", "default": true },
+    { "type": "checkbox", "id": "show_fit_tag", "label": "Show 'Made-to-fit' tag", "default": true },
     { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 20, "step": 1, "label": "Low-stock badge threshold", "default": 5 },
     { "type": "color", "id": "bg", "label": "Background", "default": "#FAF5EC" }
   ],

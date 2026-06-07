@@ -1,0 +1,47 @@
+{%- comment -%}
+  SOY demo product card — placeholder used when no collection/products wired.
+  Params: i, name, badge (bestseller|new|custom|''), rating, count, price, was, off,
+          extra (fit|under|low|''), low_n, view, swatches (comma hex), active_wish (bool)
+{%- endcomment -%}
+<div class="soy-pcard" data-soy-card>
+  <div class="soy-pcard__media">
+    <span class="soy-pcard__ph soy-pcard__ph--{{ i | default: 0 | modulo: 5 }}"></span>
+    <span class="soy-pcard__phtag">on-model · {{ view | default: 'front' }}</span>
+
+    <div class="soy-pcard__badges">
+      {%- if badge == 'bestseller' -%}<span class="soy-badge soy-badge--bestseller">Bestseller</span>{%- endif -%}
+      {%- if badge == 'new' -%}<span class="soy-badge soy-badge--new">New in</span>{%- endif -%}
+      {%- if badge == 'custom' -%}
+        <span class="soy-badge soy-badge--custom">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l2.2 5.6L20 9.2l-4 3.9 1 6-5-3-5 3 1-6-4-3.9 5.8-.6z"/></svg>Customizable
+        </span>
+      {%- endif -%}
+    </div>
+
+    <button type="button" class="soy-pcard__wish {% if active_wish %}is-active{% endif %}" aria-label="Wishlist" data-soy-wish>
+      <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
+    </button>
+
+    {%- if extra == 'low' -%}<span class="soy-pcard__lowpill">Only {{ low_n | default: 3 }} left</span>{%- endif -%}
+  </div>
+
+  <div class="soy-pcard__body">
+    <div class="soy-pcard__rating"><span class="soy-stars">★★★★★</span><span>{{ rating | default: '4.8' }} ({{ count | default: 100 }})</span></div>
+    <h3 class="soy-pcard__name">{{ name }}</h3>
+    <div class="soy-pcard__pricerow">
+      <span class="soy-pcard__now">₹{{ price }}</span>
+      {%- if was != blank -%}<span class="soy-pcard__was">₹{{ was }}</span>{%- endif -%}
+      {%- if off != blank -%}<span class="soy-pcard__off">{{ off }}% off</span>{%- endif -%}
+      {%- if extra == 'fit' -%}
+        <span class="soy-pcard__fit"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>Made-to-fit</span>
+      {%- endif -%}
+    </div>
+    {%- if extra == 'under' -%}
+      <span class="soy-pcard__tag"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l9 9-8 8-9-9Z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>Under ₹1299</span>
+    {%- endif -%}
+    <div class="soy-pcard__swatches">
+      {%- assign sw = swatches | default: '#25324D,#8A9A7B,#C25E3A' | split: ',' -%}
+      {%- for c in sw -%}<span class="soy-swatch" style="background: {{ c | strip }};"></span>{%- endfor -%}
+    </div>
+  </div>
+</div>

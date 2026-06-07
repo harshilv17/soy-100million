@@ -1,0 +1,187 @@
+/* ===================================================================
+   SOY collection / listing page
+   =================================================================== */
+
+/* ---- Banner ---- */
+.soy-colbanner {
+  background: var(--soy-ivory);
+  border-bottom: 1px solid var(--soy-line);
+  padding-block: 22px;
+}
+.soy-crumbs { font-family: var(--soy-sans); font-size: 12px; color: var(--soy-stone); display: flex; gap: 7px; flex-wrap: wrap; }
+.soy-crumbs a { color: var(--soy-stone); text-decoration: none; }
+.soy-crumbs a:hover { color: var(--soy-terracotta); }
+.soy-crumbs span { color: var(--soy-line); }
+.soy-colbanner__title {
+  font-family: var(--soy-serif); font-weight: 400; font-size: 30px; line-height: 1.1;
+  color: var(--soy-indigo); margin: 12px 0 0;
+}
+.soy-colbanner__title em { font-style: italic; }
+.soy-colbanner__desc { font-family: var(--soy-sans); font-size: 14px; line-height: 1.55; color: var(--soy-stone); max-width: 46em; margin: 10px 0 0; }
+.soy-colbanner__meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; }
+.soy-colmeta { display: inline-flex; align-items: center; gap: 6px; font-family: var(--soy-sans); font-size: 12px; color: var(--soy-stone); }
+.soy-colmeta svg { width: 14px; height: 14px; stroke: var(--soy-sage); fill: none; }
+@media (min-width: 750px) {
+  .soy-colbanner { padding-block: 30px; }
+  .soy-colbanner__title { font-size: 40px; }
+  .soy-colbanner__desc { font-size: 15px; }
+}
+
+/* ---- Layout ---- */
+.soy-col { background: var(--soy-ivory); }
+.soy-col__wrap { display: block; padding-block: 22px 60px; }
+@media (min-width: 990px) {
+  .soy-col__wrap { display: grid; grid-template-columns: 240px 1fr; gap: 40px; padding-block: 30px 80px; }
+}
+
+/* ---- Toolbar ---- */
+.soy-col__toolbar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.soy-col__mbtns { display: flex; gap: 10px; }
+.soy-col__mbtn {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--soy-line); border-radius: var(--soy-r-btn); background: var(--soy-card);
+  font-family: var(--soy-sans); font-weight: 500; font-size: 14px; color: var(--soy-charcoal);
+  padding: 11px 14px; cursor: pointer;
+}
+.soy-col__mbtn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+.soy-col__mbtn-count {
+  background: var(--soy-terracotta); color: var(--soy-ivory); font-size: 11px; font-weight: 600;
+  min-width: 18px; height: 18px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; padding: 0 5px;
+}
+.soy-col__topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.soy-col__count { font-family: var(--soy-sans); font-size: 13px; color: var(--soy-stone); }
+
+/* sort placement: mobile sits in the button row, desktop in the topbar */
+.soy-col__mbtns .soy-col__sortform { flex: 1; }
+.soy-col__mbtns .soy-col__sort { width: 100%; justify-content: space-between; padding: 2px 12px; }
+.soy-col__sort-d { display: none; }
+@media (min-width: 990px) {
+  .soy-col__sort-d { display: block; }
+}
+.soy-col__sort {
+  position: relative; display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--soy-line); border-radius: var(--soy-r-btn); background: var(--soy-card); padding: 0 12px;
+}
+.soy-col__sort svg { width: 15px; height: 15px; stroke: var(--soy-stone); fill: none; }
+.soy-col__sort select {
+  appearance: none; border: 0; background: none; outline: none; cursor: pointer;
+  font-family: var(--soy-sans); font-size: 13px; color: var(--soy-charcoal); padding: 10px 4px;
+}
+
+/* Active pills */
+.soy-col__active { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.soy-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(194,94,58,.1); color: var(--soy-terracotta);
+  border: 1px solid rgba(194,94,58,.3); border-radius: 16px;
+  font-family: var(--soy-sans); font-size: 12px; font-weight: 500; padding: 5px 11px; text-decoration: none;
+}
+.soy-pill svg { width: 11px; height: 11px; stroke: currentColor; fill: none; }
+.soy-col__clear { font-family: var(--soy-sans); font-size: 12px; color: var(--soy-stone); text-decoration: underline; }
+
+/* ---- Facets panel (desktop sidebar / mobile drawer) ---- */
+.soy-facets__chrome { display: none; }
+.soy-facets__title { font-family: var(--soy-serif); font-size: 20px; color: var(--soy-indigo); }
+.soy-facets__close { background: none; border: 0; cursor: pointer; color: var(--soy-indigo); }
+.soy-facets__close svg { width: 22px; height: 22px; stroke: currentColor; fill: none; }
+.soy-facets__heading { display: none; }
+
+.soy-fgroup { border-bottom: 1px solid var(--soy-line); padding: 16px 0; }
+.soy-fgroup > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--soy-sans); font-weight: 600; font-size: 12px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--soy-indigo);
+}
+.soy-fgroup > summary::-webkit-details-marker { display: none; }
+.soy-fgroup > summary svg { width: 14px; height: 14px; stroke: var(--soy-stone); fill: none; transition: transform .2s ease; }
+.soy-fgroup[open] > summary svg { transform: rotate(180deg); }
+.soy-fgroup__body { padding-top: 14px; }
+
+/* Size pills */
+.soy-sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+.soy-size { position: relative; }
+.soy-size input { position: absolute; opacity: 0; pointer-events: none; }
+.soy-size label {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 44px;
+  border: 1px solid var(--soy-line); border-radius: var(--soy-r-btn); background: var(--soy-card);
+  font-family: var(--soy-sans); font-size: 14px; color: var(--soy-charcoal); padding: 9px 6px; cursor: pointer;
+}
+.soy-size input:checked + label { background: var(--soy-terracotta); border-color: var(--soy-terracotta); color: var(--soy-ivory); }
+
+/* Color swatches */
+.soy-colors { display: flex; flex-wrap: wrap; gap: 14px; }
+.soy-color { text-align: center; }
+.soy-color input { position: absolute; opacity: 0; pointer-events: none; }
+.soy-color label { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+.soy-color__dot {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--soy-tan-deep);
+  box-shadow: 0 0 0 0 var(--soy-indigo); transition: box-shadow .15s ease;
+}
+.soy-color input:checked + label .soy-color__dot { box-shadow: 0 0 0 2px var(--soy-card), 0 0 0 4px var(--soy-indigo); }
+.soy-color__name { font-family: var(--soy-sans); font-size: 11px; color: var(--soy-stone); }
+
+/* Checkbox list */
+.soy-checks { display: flex; flex-direction: column; gap: 12px; }
+.soy-check { display: flex; align-items: center; gap: 11px; cursor: pointer; font-family: var(--soy-sans); font-size: 14px; color: var(--soy-charcoal); }
+.soy-check input { position: absolute; opacity: 0; pointer-events: none; }
+.soy-check__box {
+  width: 20px; height: 20px; border-radius: 5px; border: 1px solid var(--soy-line); background: var(--soy-card);
+  flex: none; display: inline-flex; align-items: center; justify-content: center; color: var(--soy-ivory);
+}
+.soy-check__box svg { width: 13px; height: 13px; opacity: 0; }
+.soy-check input:checked + .soy-check__box { background: var(--soy-terracotta); border-color: var(--soy-terracotta); }
+.soy-check input:checked + .soy-check__box svg { opacity: 1; }
+.soy-check__count { color: var(--soy-stone); font-size: 12px; }
+
+/* ---- Product grid ---- */
+.soy-col__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 750px) { .soy-col__grid { grid-template-columns: repeat(3, 1fr); gap: 22px; } }
+@media (min-width: 990px) { .soy-col__grid { grid-template-columns: repeat(3, 1fr); } }
+
+.soy-col__empty { text-align: center; padding: 60px 0; font-family: var(--soy-sans); color: var(--soy-stone); }
+
+/* Pagination */
+.soy-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 36px; }
+.soy-pagination a, .soy-pagination span {
+  font-family: var(--soy-sans); font-size: 14px; min-width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--soy-line); border-radius: var(--soy-r-btn); color: var(--soy-charcoal); text-decoration: none;
+}
+.soy-pagination .is-current { background: var(--soy-indigo); color: var(--soy-ivory); border-color: var(--soy-indigo); }
+
+/* ---- Mobile drawer behaviour ---- */
+.soy-facets-toggle { position: absolute; opacity: 0; pointer-events: none; }
+@media (max-width: 989px) {
+  .soy-col__sidebar {
+    position: fixed; inset: 0; z-index: 80;
+    transform: translateX(-100%); transition: transform .3s ease; pointer-events: none;
+  }
+  .soy-facets-toggle:checked ~ .soy-col__wrap .soy-col__sidebar { transform: translateX(0); pointer-events: auto; }
+  .soy-facets__overlay {
+    position: fixed; inset: 0; background: rgba(31,27,22,.4); opacity: 0; pointer-events: none;
+    transition: opacity .3s ease; z-index: 79;
+  }
+  .soy-facets-toggle:checked ~ .soy-facets__overlay { opacity: 1; pointer-events: auto; }
+  .soy-facets {
+    position: absolute; inset: 0; background: var(--soy-ivory); overflow-y: auto;
+    padding: 20px 22px 90px; box-shadow: var(--soy-shadow-hover);
+  }
+  .soy-facets__chrome {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; border-bottom: 1px solid var(--soy-line); margin-bottom: 4px;
+  }
+  .soy-facets__footer {
+    position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 12px;
+    padding: 14px 22px; background: var(--soy-ivory); border-top: 1px solid var(--soy-line);
+  }
+  .soy-facets__footer .soy-btn { flex: 1; }
+}
+@media (min-width: 990px) {
+  .soy-col__mbtns { display: none; }
+  .soy-facets__footer { display: none; }
+  .soy-facets__heading {
+    display: block; font-family: var(--soy-sans); font-weight: 500; font-size: 13px;
+    color: var(--soy-stone); display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  .soy-facets__heading svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
+}

@@ -1,0 +1,79 @@
+{{ 'soy-collection.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign title = collection.title | default: 'Collection'
+  assign words = title | split: ' '
+  assign last = words | last
+  assign head = ''
+  for w in words offset: 0
+    unless forloop.last
+      assign head = head | append: w | append: ' '
+    endunless
+  endfor
+-%}
+
+<section class="soy soy-colbanner">
+  <div class="soy-container">
+    <nav class="soy-crumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span>›</span>
+      <a href="{{ routes.all_products_collection_url }}">Shop</a><span>›</span>
+      <span style="color:var(--soy-charcoal)">{{ title }}</span>
+    </nav>
+
+    <h1 class="soy-colbanner__title">{{ head }}<em>{{ last }}</em></h1>
+
+    {%- assign desc = section.settings.description | default: collection.description -%}
+    {%- if desc != blank -%}
+      <p class="soy-colbanner__desc">{{ desc | strip_html }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="soy-colbanner__meta">
+        {%- for block in section.blocks -%}
+          <span class="soy-colmeta" {{ block.shopify_attributes }}>
+            {% render 'soy-icon', name: block.settings.icon %}{{ block.settings.text }}
+          </span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Collection Banner",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "textarea", "id": "description", "label": "Description override", "info": "Leave blank to use the collection's own description." }
+  ],
+  "blocks": [
+    {
+      "type": "meta",
+      "name": "Meta chip",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "cod",
+          "options": [
+            { "value": "cod", "label": "COD / wallet" },
+            { "value": "refresh", "label": "Returns" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "leaf", "label": "Leaf" }
+          ]
+        },
+        { "type": "text", "id": "text", "label": "Text", "default": "COD available" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Collection Banner",
+      "blocks": [
+        { "type": "meta", "settings": { "icon": "cod", "text": "COD available" } },
+        { "type": "meta", "settings": { "icon": "refresh", "text": "Ships in 24–48 hrs" } },
+        { "type": "meta", "settings": { "icon": "shield", "text": "Easy 7-day returns" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

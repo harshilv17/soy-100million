@@ -1,0 +1,21 @@
+{%- comment -%} SOY sort form. Preserves active filters as hidden inputs. {%- endcomment -%}
+<form method="get" class="soy-col__sortform">
+  {%- for filter in collection.filters -%}
+    {%- for v in filter.active_values -%}
+      <input type="hidden" name="{{ v.param_name }}" value="{{ v.value | escape }}">
+    {%- endfor -%}
+    {%- if filter.type == 'price_range' -%}
+      {%- if filter.min_value.value -%}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}">{%- endif -%}
+      {%- if filter.max_value.value -%}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}">{%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  <div class="soy-col__sort">
+    <svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+    <select name="sort_by" aria-label="Sort" onchange="this.form.submit()">
+      {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+      {%- for opt in collection.sort_options -%}
+        <option value="{{ opt.value }}" {% if opt.value == current_sort %}selected{% endif %}>{{ opt.name }}</option>
+      {%- endfor -%}
+    </select>
+  </div>
+</form>
