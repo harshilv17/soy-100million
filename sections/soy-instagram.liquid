@@ -19,7 +19,8 @@
             {{ block.settings.image | image_url: width: 500 | image_tag: alt: 'Customer photo', loading: 'lazy' }}
           {%- else -%}
             {%- assign phpal = '#25324D,#C25E3A,#8A9A7B,#E3D8C2,#2F3E5C,#EDE6D6' | split: ',' -%}
-            <span class="soy-igtile__ph" style="background: {{ phpal[forloop.index0 | modulo: 6] }};">customer · {{ forloop.index }}</span>
+            {%- assign pidx = forloop.index0 | modulo: 6 -%}
+            <span class="soy-igtile__ph" style="background: {{ phpal[pidx] }};">customer · {{ forloop.index }}</span>
           {%- endif -%}
           <span class="soy-igtile__cart" aria-hidden="true">
             <svg viewBox="0 0 24 24" stroke-width="1.7"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>

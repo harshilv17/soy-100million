@@ -12,7 +12,7 @@
 
   assign form_id = 'soy-pform-' | append: section.id
 
-  comment -- pricing -- endcomment
+  # pricing
   assign on_sale = false
   if has_product
     if product.compare_at_price > product.price
@@ -24,7 +24,7 @@
     assign off_pct = s.demo_off
   endif
 
-  comment -- availability / sold-out state -- endcomment
+  # availability / sold-out state
   assign current = product.selected_or_first_available_variant
   assign available = true
   if has_product
@@ -37,7 +37,7 @@
     endif
   endif
 
-  comment -- rating -- endcomment
+  # rating
   assign rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count
   if rating == blank
