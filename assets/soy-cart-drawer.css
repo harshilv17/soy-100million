@@ -1,0 +1,199 @@
+/* =====================================================================
+   SOY — Cart drawer. Side slide-in (desktop + mobile).
+   Reskins Dawn cart-drawer; overrides component-cart-drawer.css via
+   higher-specificity .soy-cd selectors. Tokens from soy-base.css.
+   ===================================================================== */
+
+/* dim overlay (Dawn .drawer = full-viewport flex container) */
+.soy-cd.drawer { background: rgba(31, 27, 22, 0.45); }
+
+/* panel */
+.soy-cd .soy-cd__inner {
+  position: relative;
+  margin-left: auto;
+  height: 100%;
+  width: 100%;
+  max-width: 460px;
+  padding: 0;
+  border: 0;
+  background: var(--soy-ivory);
+  color: var(--soy-charcoal);
+  font-family: var(--soy-sans);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -12px 0 40px -12px rgba(37, 50, 77, 0.35);
+}
+.soy-cd.active .soy-cd__inner { transform: translateX(0); }
+@media (max-width: 749px) {
+  .soy-cd .soy-cd__inner { max-width: 100%; }
+}
+.soy-cd .soy-cd__inner * { box-sizing: border-box; }
+
+/* header */
+.soy-cd__head {
+  flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--soy-line);
+}
+.soy-cd__title {
+  font-family: var(--soy-serif); font-weight: 400; font-size: 24px;
+  color: var(--soy-indigo); margin: 0;
+}
+.soy-cd__title span { color: var(--soy-stone); }
+.soy-cd__close {
+  background: none; border: 0; cursor: pointer; padding: 4px;
+  color: var(--soy-charcoal); line-height: 0;
+}
+.soy-cd__close svg { width: 24px; height: 24px; }
+
+/* scrollable body */
+.soy-cd__body {
+  flex: 1 1 auto; overflow-y: auto;
+  padding: 18px 24px 8px;
+  scrollbar-width: thin;
+}
+
+/* empty state */
+.soy-cd__empty {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px; padding: 40px 24px;
+  text-align: center;
+}
+.soy-cd__empty-txt { font-family: var(--soy-serif); font-size: 20px; color: var(--soy-indigo); margin: 0; }
+.soy-cd__continue {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 14px; text-decoration: none;
+  background: var(--soy-terracotta); color: var(--soy-ivory);
+  border-radius: var(--soy-r-btn); padding: 13px 26px;
+}
+.soy-cd__continue:hover { background: var(--soy-terracotta-hover); }
+
+/* free-shipping bar */
+.soy-cd__ship {
+  background: var(--soy-sage-pale);
+  border-radius: var(--soy-r-card);
+  padding: 14px 16px; margin-bottom: 18px;
+}
+.soy-cd__ship-row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--soy-charcoal); }
+.soy-cd__ship-row svg { width: 18px; height: 18px; color: var(--soy-sage); flex: none; }
+.soy-cd__ship-row b { font-weight: 600; }
+.soy-cd__bar { margin-top: 10px; height: 7px; border-radius: 4px; background: var(--soy-tan-deep); overflow: hidden; }
+.soy-cd__bar span { display: block; height: 100%; border-radius: 4px; background: var(--soy-sage); transition: width 0.4s ease; }
+
+/* item list */
+.soy-cd__list { display: flex; flex-direction: column; }
+.soy-citem {
+  display: flex; gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--soy-line);
+}
+.soy-citem:first-child { padding-top: 4px; }
+.soy-citem__media {
+  flex: none; width: 92px; aspect-ratio: 4 / 5;
+  border-radius: 10px; overflow: hidden;
+  background: var(--soy-tan); display: block;
+}
+.soy-citem__media img { width: 100%; height: 100%; object-fit: cover; }
+.soy-citem__main { flex: 1; min-width: 0; }
+.soy-citem__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.soy-citem__name {
+  font-family: var(--soy-serif); font-size: 18px; line-height: 1.2;
+  color: var(--soy-indigo); text-decoration: none;
+}
+.soy-citem__name:hover { color: var(--soy-terracotta); }
+.soy-citem__remove {
+  flex: none; background: none; border: 0; cursor: pointer; padding: 2px;
+  color: var(--soy-stone); line-height: 0;
+}
+.soy-citem__remove:hover { color: var(--soy-charcoal); }
+.soy-citem__remove svg { width: 18px; height: 18px; }
+.soy-citem__opts { font-size: 13px; color: var(--soy-stone); margin-top: 4px; }
+
+.soy-citem__pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--soy-sage-pale); color: var(--soy-sage);
+  font-size: 12px; font-weight: 500;
+  padding: 5px 10px; border-radius: 6px; margin-top: 8px;
+}
+.soy-citem__pill svg { width: 13px; height: 13px; }
+
+.soy-citem__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+
+/* quantity stepper */
+.soy-qty {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--soy-line); border-radius: var(--soy-r-btn);
+  background: var(--soy-card); overflow: hidden;
+}
+.soy-qty__btn {
+  background: none; border: 0; cursor: pointer; padding: 10px 12px;
+  color: var(--soy-indigo); line-height: 0;
+}
+.soy-qty__btn:hover { background: var(--soy-ivory-deep); }
+.soy-qty__btn svg { width: 15px; height: 15px; }
+.soy-qty__input {
+  width: 40px; text-align: center; border: 0; background: none;
+  font-family: var(--soy-sans); font-size: 15px; font-weight: 500; color: var(--soy-charcoal);
+  -moz-appearance: textfield; padding: 8px 0;
+}
+.soy-qty__input::-webkit-outer-spin-button,
+.soy-qty__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.soy-citem__price { position: relative; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.soy-citem__now { font-family: var(--soy-serif); font-size: 18px; color: var(--soy-terracotta); }
+.soy-citem__was { font-size: 13px; color: var(--soy-stone); }
+.soy-citem__off { font-size: 12px; font-weight: 500; color: var(--soy-sage); }
+.soy-citem__price .loading__spinner { position: absolute; right: 0; top: -2px; }
+
+.soy-citem__error { color: var(--soy-terracotta); font-size: 12px; }
+.soy-citem__error:empty,
+.soy-citem__error .cart-item__error-text:empty { display: none; }
+.soy-cd__errors { color: var(--soy-terracotta); font-size: 13px; }
+
+/* returns note */
+.soy-cd__returns {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; line-height: 1.5; color: var(--soy-stone);
+  padding: 16px 0 4px; margin: 0;
+}
+.soy-cd__returns svg { flex: none; width: 18px; height: 18px; color: var(--soy-sage); margin-top: 1px; }
+
+/* footer */
+.soy-cd__foot {
+  flex: none;
+  border-top: 1px solid var(--soy-line);
+  background: var(--soy-card);
+  padding: 18px 24px calc(18px + env(safe-area-inset-bottom));
+}
+.soy-cd__subtotal {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.soy-cd__subtotal span:first-child { font-size: 15px; color: var(--soy-charcoal); }
+.soy-cd__sub-val { font-family: var(--soy-serif); font-size: 26px; color: var(--soy-indigo); }
+.soy-cd__checkout {
+  width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  font-family: var(--soy-sans); font-weight: 600; font-size: 16px;
+  background: var(--soy-terracotta); color: var(--soy-ivory);
+  border: 0; border-radius: var(--soy-r-btn); padding: 17px; cursor: pointer;
+  transition: background 0.2s ease;
+}
+.soy-cd__checkout:hover { background: var(--soy-terracotta-hover); }
+.soy-cd__checkout[disabled] { background: var(--soy-stone); cursor: not-allowed; }
+.soy-cd__checkout svg { width: 19px; height: 19px; }
+.soy-cd__secure {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-size: 13px; color: var(--soy-sage); margin-top: 14px;
+}
+.soy-cd__secure svg { width: 15px; height: 15px; }
+.soy-cd__pays { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.soy-cd__pays .soy-pay {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--soy-sans); font-size: 11px; font-weight: 600; letter-spacing: .01em;
+  color: var(--soy-stone); background: var(--soy-card);
+  border: 1px solid var(--soy-line); border-radius: 5px; padding: 5px 10px;
+}

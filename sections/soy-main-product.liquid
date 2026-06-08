@@ -1,0 +1,427 @@
+{{ 'soy-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'soy-product.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'soy-wishlist.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+  assign has_product = false
+  if product != blank and product.title != blank
+    assign has_product = true
+  endif
+
+  assign form_id = 'soy-pform-' | append: section.id
+
+  comment -- pricing -- endcomment
+  assign on_sale = false
+  if has_product
+    if product.compare_at_price > product.price
+      assign on_sale = true
+      assign off_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
+    endif
+  else
+    assign on_sale = true
+    assign off_pct = s.demo_off
+  endif
+
+  comment -- availability / sold-out state -- endcomment
+  assign current = product.selected_or_first_available_variant
+  assign available = true
+  if has_product
+    if product.available == false or current.available == false
+      assign available = false
+    endif
+  else
+    if s.demo_sold_out
+      assign available = false
+    endif
+  endif
+
+  comment -- rating -- endcomment
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count
+  if rating == blank
+    assign rating = s.demo_rating
+    assign rating_count = s.demo_rating_count
+  endif
+
+  assign emi_months = s.emi_months | default: 6
+  assign media_count = product.media.size
+-%}
+
+<section class="soy soy-pdp" data-soy-pdp data-section-id="{{ section.id }}">
+  <div class="soy-container">
+
+    <nav class="soy-pdp__crumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span>›</span>
+      <a href="{{ routes.all_products_collection_url }}">Shop</a><span>›</span>
+      {%- if has_product and product.collections.first -%}
+        <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+      {%- else -%}
+        {{ s.demo_collection }}
+      {%- endif -%}
+    </nav>
+
+    <div class="soy-pdp__wrap">
+
+      {%- comment -%} ===================== GALLERY ===================== {%- endcomment -%}
+      <div class="soy-gallery" data-soy-gallery>
+        <div class="soy-gallery__thumbs" role="tablist" aria-label="Product images">
+          {%- if has_product and media_count > 0 -%}
+            {%- for media in product.media -%}
+              <button type="button" class="soy-thumb{% if forloop.first %} is-active{% endif %}" data-soy-thumb="{{ forloop.index0 }}" role="tab" aria-label="Image {{ forloop.index }}">
+                <img src="{{ media.preview_image | image_url: width: 200 }}" alt="" loading="lazy" width="200" height="200">
+              </button>
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign n = s.demo_media_count | default: 5 -%}
+            {%- for i in (1..n) -%}
+              <button type="button" class="soy-thumb soy-batik{% if forloop.first %} is-active{% endif %}" data-soy-thumb="{{ forloop.index0 }}" role="tab" aria-label="Image {{ forloop.index }}"></button>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        <div class="soy-gallery__stage">
+          {%- if available == false -%}<span class="soy-gallery__soldout" data-soy-soldout>Sold out</span>{%- endif -%}
+
+          <button type="button" class="soy-gallery__wish" aria-label="Add to wishlist" data-soy-wish data-handle="{{ product.handle }}">
+            <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
+          </button>
+
+          {%- if has_product and media_count > 0 -%}
+            {%- for media in product.media -%}
+              <div class="soy-gallery__slide{% if forloop.first %} is-active{% endif %}" data-soy-slide="{{ forloop.index0 }}">
+                <img src="{{ media.preview_image | image_url: width: 1100 }}" alt="{{ media.alt | escape }}" {% unless forloop.first %}loading="lazy"{% endunless %} width="1100" height="1375">
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign n = s.demo_media_count | default: 5 -%}
+            {%- assign views = s.demo_views | split: ',' -%}
+            {%- for i in (1..n) -%}
+              <div class="soy-gallery__slide soy-batik{% if forloop.first %} is-active{% endif %}" data-soy-slide="{{ forloop.index0 }}">
+                <span class="soy-gallery__tag">{{ views[forloop.index0] | default: 'on-model · front' | strip }}</span>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+
+          <div class="soy-gallery__dots">
+            {%- assign dotn = media_count -%}
+            {%- if dotn == 0 -%}{%- assign dotn = s.demo_media_count | default: 5 -%}{%- endif -%}
+            {%- for i in (1..dotn) -%}
+              <button type="button" class="soy-gallery__dot{% if forloop.first %} is-active{% endif %}" data-soy-dot="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} ===================== INFO ===================== {%- endcomment -%}
+      <div class="soy-info" data-soy-info>
+
+        <div class="soy-info__badges">
+          {%- if has_product -%}
+            {%- if product.tags contains 'bestseller' -%}<span class="soy-badge soy-badge--bestseller">Bestseller</span>{%- endif -%}
+            {%- if product.tags contains 'customizable' -%}<span class="soy-badge soy-badge--custom"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l2.2 5.6L20 9.2l-4 3.9 1 6-5-3-5 3 1-6-4-3.9 5.8-.6z"/></svg>Customizable</span>{%- endif -%}
+          {%- else -%}
+            <span class="soy-badge soy-badge--bestseller">Bestseller</span>
+            <span class="soy-badge soy-badge--custom"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l2.2 5.6L20 9.2l-4 3.9 1 6-5-3-5 3 1-6-4-3.9 5.8-.6z"/></svg>Customizable</span>
+          {%- endif -%}
+        </div>
+
+        <h1 class="soy-info__title" data-soy-title>{% if has_product %}{{ product.title }}{% else %}{{ s.demo_title }}{% endif %}</h1>
+
+        <div class="soy-info__rating">
+          <span class="soy-stars">★★★★★</span>
+          <span class="soy-info__rating-num">{{ rating | round: 1 }}</span>
+          <a href="#soy-reviews" class="soy-info__rating-count">{{ rating_count }} reviews</a>
+        </div>
+
+        <div class="soy-info__pricerow" data-soy-pricerow>
+          <span class="soy-info__now" data-soy-price>{% if has_product %}{{ product.price | money }}{% else %}{{ s.demo_price }}{% endif %}</span>
+          {%- if on_sale -%}
+            <span class="soy-info__was" data-soy-compare>{% if has_product %}{{ product.compare_at_price | money }}{% else %}{{ s.demo_compare }}{% endif %}</span>
+            <span class="soy-info__off">{{ off_pct }}% off</span>
+          {%- endif -%}
+        </div>
+        <p class="soy-info__taxline">
+          Inclusive of all taxes
+          {%- if s.show_emi -%} · EMI from {% if has_product %}{{ product.price | divided_by: emi_months | money }}{% else %}{{ s.demo_emi }}{% endif %}/mo{%- endif -%}
+        </p>
+
+        {%- comment -%} ---------- VARIANT OPTIONS ---------- {%- endcomment -%}
+        {%- if has_product and product.has_only_default_variant == false -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign oname = option.name | downcase -%}
+            {%- assign optidx = option.position | minus: 1 -%}
+            <div class="soy-opt">
+              <div class="soy-opt__label">
+                <span class="soy-opt__name">{{ option.name }} — <b data-soy-optsel="{{ option.position }}">{{ option.selected_value }}</b></span>
+                {%- if oname contains 'size' and s.size_chart_url != blank -%}
+                  <a class="soy-opt__chart" href="{{ s.size_chart_url }}"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 8h18M3 16h18M8 3v18M16 3v18"/></svg>Size chart</a>
+                {%- endif -%}
+              </div>
+
+              {%- if oname contains 'colour' or oname contains 'color' -%}
+                <div class="soy-swatches">
+                  {%- for value in option.values -%}
+                    <button type="button" class="soy-swatchbtn{% if value.selected %} is-active{% endif %}"
+                      data-soy-opt="{{ option.position }}" data-soy-value="{{ value | escape }}"
+                      style="background: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}var(--soy-tan-deep){% endif %};"
+                      title="{{ value | escape }}" aria-label="{{ value | escape }}"></button>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="soy-sizes">
+                  {%- for value in option.values -%}
+                    {%- assign val_available = false -%}
+                    {%- for v in product.variants -%}
+                      {%- if v.options[optidx] == value.value and v.available -%}{%- assign val_available = true -%}{%- break -%}{%- endif -%}
+                    {%- endfor -%}
+                    <button type="button" class="soy-sizebtn{% if value.selected %} is-active{% endif %}"
+                      data-soy-opt="{{ option.position }}" data-soy-value="{{ value | escape }}"
+                      {% unless val_available %}disabled aria-disabled="true"{% endunless %}>{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+
+        {%- else -%}
+          {%- comment -%} demo colour + size (no real variants) {%- endcomment -%}
+          {%- assign dcolours = s.demo_colours | split: ',' -%}
+          <div class="soy-opt">
+            <div class="soy-opt__label"><span class="soy-opt__name">Colour — <b data-soy-optsel="1">{{ s.demo_colour_selected }}</b></span></div>
+            <div class="soy-swatches">
+              {%- for c in dcolours -%}
+                {%- assign parts = c | split: ':' -%}
+                {%- assign cname = parts[0] | strip -%}
+                <button type="button" class="soy-swatchbtn{% if cname == s.demo_colour_selected %} is-active{% endif %}" data-soy-demoswatch="{{ cname | escape }}" style="background: {{ parts[1] | strip }};" title="{{ cname | escape }}" aria-label="{{ cname | escape }}"></button>
+              {%- endfor -%}
+            </div>
+          </div>
+          <div class="soy-opt">
+            <div class="soy-opt__label">
+              <span class="soy-opt__name">Size — <b>{{ s.demo_size_selected }}</b></span>
+              {%- if s.size_chart_url != blank -%}<a class="soy-opt__chart" href="{{ s.size_chart_url }}"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 8h18M3 16h18M8 3v18M16 3v18"/></svg>Size chart</a>{%- endif -%}
+            </div>
+            <div class="soy-sizes">
+              {%- assign dsizes = s.demo_sizes | split: ',' -%}
+              {%- assign dsold = s.demo_sizes_soldout | split: ',' -%}
+              {%- for sz in dsizes -%}
+                {%- assign szn = sz | strip -%}
+                <button type="button" class="soy-sizebtn{% if szn == s.demo_size_selected %} is-active{% endif %}" data-soy-demosize="{{ szn | escape }}" {% if dsold contains szn %}disabled aria-disabled="true"{% endif %}>{{ szn }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ---------- CUSTOMIZE MY FIT ---------- {%- endcomment -%}
+        {%- if s.show_customize -%}
+          <div class="soy-customize">
+            <span class="soy-customize__icon"><svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.5 15.5M14.5 14.5L20 20M8.2 8.2L12 12"/></svg></span>
+            <div class="soy-customize__txt">
+              <div class="soy-customize__t">Customize my fit</div>
+              <div class="soy-customize__s">{{ s.customize_subtitle }}</div>
+            </div>
+            <button type="button" class="soy-toggle" data-soy-customize-toggle aria-pressed="false" aria-label="Toggle made-to-measure customization"></button>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ---------- BUY / NOTIFY ---------- {%- endcomment -%}
+        <div data-soy-buyzone {% if available == false %}hidden{% endif %}>
+          <product-form class="product-form" data-section-id="{{ section.id }}">
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              <span class="product-form__error-message"></span>
+            </div>
+            {%- form 'product', product, id: form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input type="hidden" name="id" value="{{ current.id }}" class="product-variant-id" {% if available == false %}disabled{% endif %} data-soy-varid>
+              <input type="hidden" name="properties[Made-to-measure]" value="" disabled data-soy-mtm>
+              <div class="soy-buy">
+                <button type="submit" name="add" class="soy-buy__add" data-soy-add {% if available == false %}aria-disabled="true"{% endif %}>
+                  <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.5 12.5h11L21 7H6"/></svg>
+                  <span data-soy-addlabel>{{ s.add_label | default: 'Add to cart' }} — <span data-soy-addprice>{% if has_product %}{{ product.price | money }}{% else %}{{ s.demo_price }}{% endif %}</span></span>
+                  {%- render 'loading-spinner' -%}
+                </button>
+                <button type="button" class="soy-buy__wish" aria-label="Add to wishlist" data-soy-wish data-handle="{{ product.handle }}">
+                  <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10Z"/></svg>
+                </button>
+              </div>
+            {%- endform -%}
+          </product-form>
+        </div>
+
+        <div class="soy-notify" data-soy-notify {% if available %}hidden{% endif %}>
+          <div class="soy-notify__h"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>Notify me when back</div>
+          <p class="soy-notify__s">{{ s.notify_subtitle }}</p>
+          {%- form 'contact', id: 'soy-notify-form' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="soy-notify__ok">✓ You're on the list — we'll text you when it restocks.</p>
+            {%- endif -%}
+            <input type="hidden" name="contact[tags]" value="back-in-stock">
+            <input type="hidden" name="contact[product]" value="{% if has_product %}{{ product.title }}{% else %}{{ s.demo_title }}{% endif %}">
+            <input type="text" name="contact[name]" class="soy-notify__field" placeholder="Your name" required>
+            <input type="tel" name="contact[phone]" class="soy-notify__field" placeholder="Phone number" required>
+            <button type="submit" class="soy-notify__btn"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg>Notify me</button>
+          {%- endform -%}
+        </div>
+
+        {%- comment -%} ---------- TRUST ROW ---------- {%- endcomment -%}
+        <div class="soy-trust">
+          <div class="soy-trust__item"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M1 6h13v9H1zM14 9h4l3 3v3h-7zM5.5 18a1.6 1.6 0 1 0 0-.1M17.5 18a1.6 1.6 0 1 0 0-.1"/></svg><span>Express shipping</span></div>
+          <div class="soy-trust__item"><svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>COD available</span></div>
+          <div class="soy-trust__item"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 12a9 9 0 0 1-15 6.7L3 16M21 4v4h-4M3 20v-4h4"/></svg><span>Easy 7-day returns</span></div>
+        </div>
+
+        {%- comment -%} ---------- SECURE + PAYMENTS ---------- {%- endcomment -%}
+        <div class="soy-secure">
+          <span class="soy-secure__lock"><svg viewBox="0 0 24 24" stroke-width="1.6"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>100% secure checkout</span>
+          {%- assign pays = s.payment_badges | split: ',' -%}
+          {%- for p in pays -%}<span class="soy-pay">{{ p | strip }}</span>{%- endfor -%}
+        </div>
+
+        {%- if s.show_customize -%}
+          <div class="soy-inforow"><svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.5 15.5M14.5 14.5L20 20"/></svg><div>Complimentary <b>made-to-measure</b> customization on this style</div></div>
+        {%- endif -%}
+        <div class="soy-inforow"><svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div>Ships in <b>{{ s.ships_time }}</b> · delivered in {{ s.delivery_time }}</div></div>
+
+        {%- comment -%} ---------- CHAT ---------- {%- endcomment -%}
+        {%- if s.whatsapp_number != blank -%}
+          <a class="soy-chat" href="https://wa.me/{{ s.whatsapp_number | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">
+            <span class="soy-chat__icon"><svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.2-5.2A8.5 8.5 0 1 1 21 11.5Z"/></svg></span>
+            <div class="soy-chat__txt"><div class="soy-chat__t">Questions? Chat with us</div><div class="soy-chat__s">Typically replies within minutes</div></div>
+            <span class="soy-chat__arrow">›</span>
+          </a>
+        {%- endif -%}
+
+        {%- comment -%} ---------- ACCORDIONS ---------- {%- endcomment -%}
+        <div class="soy-acc" data-soy-acc>
+          {%- assign desc = product.description -%}
+          {%- if desc == blank -%}{%- assign desc = s.demo_description -%}{%- endif -%}
+          {%- assign rows = '' -%}
+          <div class="soy-acc__item">
+            <button type="button" class="soy-acc__head" aria-expanded="true"><span>Description</span><span class="soy-acc__sign"></span></button>
+            <div class="soy-acc__body"><div class="soy-acc__body-inner">{{ desc }}</div></div>
+          </div>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'accordion' and block.settings.content != blank -%}
+              <div class="soy-acc__item" {{ block.shopify_attributes }}>
+                <button type="button" class="soy-acc__head" aria-expanded="false"><span>{{ block.settings.heading }}</span><span class="soy-acc__sign"></span></button>
+                <div class="soy-acc__body"><div class="soy-acc__body-inner">{{ block.settings.content }}</div></div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} ---------- SELLER & CARE ---------- {%- endcomment -%}
+        {%- if s.show_seller -%}
+          <div class="soy-seller">
+            <div class="soy-seller__h">Seller &amp; care</div>
+            <dl>
+              <div class="soy-seller__row"><dt>Sold by</dt><dd>{{ s.seller_name }}</dd></div>
+              <div class="soy-seller__row"><dt>Fabric</dt><dd>{{ s.fabric }}</dd></div>
+              <div class="soy-seller__row"><dt>Care</dt><dd>{{ s.care }}</dd></div>
+              <div class="soy-seller__row"><dt>Country of origin</dt><dd>{{ s.origin }}</dd></div>
+            </dl>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ===================== MOBILE STICKY BAR ===================== {%- endcomment -%}
+  <div class="soy-stickybar" data-soy-sticky aria-hidden="true">
+    <div class="soy-stickybar__thumb soy-batik">
+      {%- if has_product and product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 120 }}" alt="">{%- endif -%}
+    </div>
+    <div class="soy-stickybar__info">
+      <div class="soy-stickybar__title">{% if has_product %}{{ product.title }}{% else %}{{ s.demo_title }}{% endif %}</div>
+      <div class="soy-stickybar__meta">
+        <span class="now" data-soy-sticky-price>{% if has_product %}{{ product.price | money }}{% else %}{{ s.demo_price }}{% endif %}</span>
+        {%- if on_sale -%}<span class="was">{% if has_product %}{{ product.compare_at_price | money }}{% else %}{{ s.demo_compare }}{% endif %}</span>{%- endif -%}
+        <span data-soy-sticky-size> · Size {% if has_product %}{{ current.title }}{% else %}{{ s.demo_size_selected }}{% endif %}</span>
+      </div>
+    </div>
+    <button type="button" class="soy-stickybar__add" data-soy-sticky-add form="{{ form_id }}">
+      <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M2 3h3l2.5 12.5h11L21 7H6"/></svg>Add
+    </button>
+  </div>
+
+  <script type="application/json" data-soy-variants>
+    {%- if has_product -%}{{ product.variants | json }}{%- else -%}[]{%- endif -%}
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "SOY Product",
+  "tag": "section",
+  "class": "soy-section-product",
+  "settings": [
+    { "type": "header", "content": "Pricing & EMI" },
+    { "type": "checkbox", "id": "show_emi", "label": "Show EMI line", "default": true },
+    { "type": "range", "id": "emi_months", "min": 3, "max": 24, "step": 1, "label": "EMI months", "default": 6 },
+    { "type": "text", "id": "payment_badges", "label": "Payment badges (comma)", "default": "UPI, Visa, Mastercard, RuPay, Razorpay" },
+
+    { "type": "header", "content": "Customize my fit" },
+    { "type": "checkbox", "id": "show_customize", "label": "Show customize toggle", "default": true },
+    { "type": "text", "id": "customize_subtitle", "label": "Subtitle", "default": "Complimentary made-to-measure" },
+
+    { "type": "header", "content": "Add to cart" },
+    { "type": "text", "id": "add_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "url", "id": "size_chart_url", "label": "Size chart link" },
+
+    { "type": "header", "content": "Delivery & service" },
+    { "type": "text", "id": "ships_time", "label": "Ships in", "default": "24–48 hrs" },
+    { "type": "text", "id": "delivery_time", "label": "Delivered in", "default": "4–6 days" },
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "default": "+919999999999" },
+    { "type": "text", "id": "notify_subtitle", "label": "Notify subtitle", "default": "This size sells out fast. Leave your details and we'll text you the moment it restocks." },
+
+    { "type": "header", "content": "Seller & care" },
+    { "type": "checkbox", "id": "show_seller", "label": "Show seller & care card", "default": true },
+    { "type": "text", "id": "seller_name", "label": "Sold by", "default": "Shades of You · Jaipur" },
+    { "type": "text", "id": "fabric", "label": "Fabric", "default": "100% cotton mul" },
+    { "type": "text", "id": "care", "label": "Care", "default": "Hand-wash cold, dry in shade" },
+    { "type": "text", "id": "origin", "label": "Country of origin", "default": "India" },
+
+    { "type": "header", "content": "Demo content (when no product / default variant)" },
+    { "type": "text", "id": "demo_title", "label": "Title", "default": "Sage Batik Kurta Set" },
+    { "type": "text", "id": "demo_collection", "label": "Breadcrumb collection", "default": "Kurta Sets" },
+    { "type": "text", "id": "demo_price", "label": "Price", "default": "₹2,499" },
+    { "type": "text", "id": "demo_compare", "label": "Compare price", "default": "₹3,299" },
+    { "type": "range", "id": "demo_off", "min": 1, "max": 90, "step": 1, "label": "Off %", "default": 24 },
+    { "type": "text", "id": "demo_emi", "label": "EMI amount", "default": "₹417" },
+    { "type": "text", "id": "demo_rating", "label": "Rating", "default": "4.9" },
+    { "type": "text", "id": "demo_rating_count", "label": "Rating count", "default": "214" },
+    { "type": "range", "id": "demo_media_count", "min": 1, "max": 8, "step": 1, "label": "Placeholder images", "default": 5 },
+    { "type": "text", "id": "demo_views", "label": "Image captions (comma)", "default": "on-model · front, on-model · back, detail · batik, flat-lay, on-model · side" },
+    { "type": "text", "id": "demo_colours", "label": "Colours (Name:hex, comma)", "default": "Sage:#8A9A7B, Indigo:#25324D, Olive:#5C5138" },
+    { "type": "text", "id": "demo_colour_selected", "label": "Selected colour", "default": "Indigo" },
+    { "type": "text", "id": "demo_sizes", "label": "Sizes (comma)", "default": "XS, S, M, L, XL, XXL" },
+    { "type": "text", "id": "demo_sizes_soldout", "label": "Sold-out sizes (comma)", "default": "XL" },
+    { "type": "text", "id": "demo_size_selected", "label": "Selected size", "default": "M" },
+    { "type": "checkbox", "id": "demo_sold_out", "label": "Preview SOLD OUT state", "default": false },
+    { "type": "richtext", "id": "demo_description", "label": "Description", "default": "<p>Straight-cut kurta with side slits and matching tapered pants. Wax-resist batik dyed by hand — slight variation in pattern is the mark of the craft. Comes with a matching dupatta.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "Accordion row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Style notes" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Add details here.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOY Product",
+      "blocks": [
+        { "type": "accordion", "settings": { "heading": "Style notes", "content": "<p>Relaxed straight fit. Model is 5'7\" wearing size M. Pairs with the matching dupatta and tapered pants.</p>" } },
+        { "type": "accordion", "settings": { "heading": "Size & fit", "content": "<p>True to size. Between sizes? Size up or use complimentary made-to-measure. See the size chart for measurements.</p>" } },
+        { "type": "accordion", "settings": { "heading": "Material & care", "content": "<p>100% cotton mul, hand-dyed batik. Hand-wash cold separately, dry in shade, warm iron inside-out.</p>" } },
+        { "type": "accordion", "settings": { "heading": "Shipping & returns", "content": "<p>Ships in 24–48 hrs, delivered in 4–6 days. Easy 7-day returns on stock sizes. Made-to-measure orders are final sale.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
