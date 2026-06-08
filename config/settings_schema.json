@@ -150,13 +150,15 @@
     "name": "t:settings_schema.layout.name",
     "settings": [
       {
-        "type": "range",
+        "type": "select",
         "id": "page_width",
-        "min": 1000,
-        "max": 2000,
-        "step": 10,
-        "default": 1200,
-        "unit": "px",
+        "options": [
+          { "value": "1000", "label": "1000px" },
+          { "value": "1200", "label": "1200px" },
+          { "value": "1400", "label": "1400px" },
+          { "value": "1600", "label": "1600px" }
+        ],
+        "default": "1200",
         "label": "t:settings_schema.layout.settings.page_width.label"
       },
       {
