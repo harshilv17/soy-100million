@@ -1,0 +1,12 @@
+{%- comment -%}
+  SOY cart icon + count bubble. Rendered inside the <a id="cart-icon-bubble">
+  in soy-header AND by sections/cart-icon-bubble.liquid (so add-to-cart re-render
+  swaps in identical markup). Keep markup in sync with both.
+{%- endcomment -%}
+<svg viewBox="0 0 24 24" stroke-width="1.6" fill="none" stroke="currentColor" aria-hidden="true">
+  <path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/>
+</svg>
+{%- if cart != empty -%}
+  <span class="soy-cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+{%- endif -%}
+<span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
